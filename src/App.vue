@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 h-screen">
+  <div class="flex h-screen">
 <div>
     <button
       @click="toggleSidebar"
@@ -66,8 +66,17 @@
       class="fixed inset-0 bg-black opacity-0 z-10"
       @click="toggleSidebar"
     ></div>
-    <div>
-      <h1>Preview</h1>
+    <div
+      :class="{
+        'flex-1': true,              
+        'ml-20': !isSidebarOpen,     
+        'ml-[450px]': isSidebarOpen,    
+      }"
+      class="preview-section p-4"
+    >
+    <h2 class="text-xl font-bold text-center text-black">Preview</h2>
+
+
     </div>
   </div>
 </template>
@@ -81,7 +90,7 @@ export default {
   },
   data() {
     return {
-      isSidebarOpen: false,
+      isSidebarOpen: true,
       tools: [
         {
           name: "Text",
