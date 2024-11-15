@@ -3,7 +3,7 @@
     <div>
       <button @click="toggleSidebar" class="fixed top-4 left-4 z-30 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
-          <i class="pi pi-times" style="font-size: 1.5rem; color:black"></i>
+          <i class="pi pi-times" style="font-size: 1.2rem; color:black"></i>
         </span>
         <span v-else>
           <i class="pi pi-align-justify" style="font-size: 1.5rem; color:black"></i>
@@ -14,7 +14,7 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="fixed inset-y-0 left-20 w-[350px] text-white shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="fixed inset-y-0 left-[26px] w-[350px] text-white shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-xl font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
@@ -31,8 +31,8 @@
             <transition name="fade">
               <div v-if="tool.isOpen" class="grid grid-cols-3 gap-3">
                 <div v-for="(subTool, subIndex) in tool.subTools" :key="subIndex"
-                  class="flex flex-col cursor-pointer text-xs items-center p-2 border text-black rounded hover:bg-gray-100"
-                  @click="addSubTool(subTool)">
+                  class="flex flex-col gap-2 cursor-pointer text-xs items-center p-2 border text-black rounded hover:bg-gray-100"
+                  @click="openEditor(subTool)">
                   <Icon :icon="subTool.icon" class="text-2xl" />
                   <span>{{ subTool.name }}</span>
                 </div>
@@ -43,16 +43,10 @@
       </transition>
     </div>
 
-    <!-- <div
-      v-if="isSidebarOpen"
-      class="fixed inset-0 bg-black opacity-0 z-10"
-      @click="toggleSidebar"
-    ></div> -->
-
     <div :class="{
       'flex-1': true,
       'ml-20': !isSidebarOpen,
-      'ml-[450px]': isSidebarOpen,
+      'ml-[380px]': isSidebarOpen,
     }" class="preview-section p-4">
       <h2 class="text-xl font-bold text-center text-black">Preview</h2>
 
@@ -63,47 +57,76 @@
             <i class="pi pi-times" style="font-size: 1rem;"></i>
           </button>
         </div>
-
-        <!-- Inserted tools -->
         <div v-if="tool.name === 'Paragraph'">
-          <textarea type="text" placeholder="Enter your text..." class="w-full p-2 border rounded-lg"></textarea>
+          <p>{{ tool.content }}</p>
         </div>
-
         <div v-if="tool.name === 'Heading'">
-          <input type="text" placeholder="Enter your text..."
-            class="w-full p-2 border rounded-lg font-bold text-xl"></input>
+          <h1 class="font-bold text-xl">{{ tool.content }}</h1>
         </div>
 
         <div v-if="tool.name === 'Underline'">
-          <input type="text" placeholder="Enter your text..." class="w-full p-2 border underline rounded-lg"></input>
+          <u>{{ tool.content }}</u>
         </div>
 
         <div v-if="tool.name === 'List'">
-          <textarea type="text" placeholder="Enter your text..." rows="6"
-            class="w-full p-2 border rounded-lg"></textarea>
+          <ul class="list-disc pl-5">
+            <li v-for="(item, index) in tool.listItems" :key="index">
+              {{ item }}
+            </li>
+          </ul>
         </div>
 
-        <div v-if="tool.name === 'Image'">
-          <input type="file" accept=".jpg/*" class="w-full p-2 border rounded-lg" />
+        <div v-if="activeEditorTool.imageSrc" class="mt-4">
+          <img :src="activeEditorTool.imageSrc" alt="Uploaded Preview" class="max-w-full h-auto rounded-lg">{{
+            tool.content }}</img>
+        </div>
+      </div>
+
+    </div>
+
+    <div v-if="activeEditorTool" class="editor-section border-2 border-gray-200 p-4 w-[400px]">
+      <h2 class="text-xl font-bold text-center text-black">Editor</h2>
+      <div class="editor-content">
+        <span>Editing: {{ activeEditorTool.name }}</span>
+        <div v-if="activeEditorTool.name === 'Paragraph'">
+          <textarea v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg"></textarea>
+        </div>
+        <div v-if="activeEditorTool.name === 'Heading'">
+          <input v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg font-bold text-xl" />
         </div>
 
-        <div v-if="tool.name === 'Cover'">
-          <input type="file" accept=".jpg,.png/*" class="w-full p-2 border rounded-lg" />
+        <div v-if="activeEditorTool.name === 'Underline'">
+          <input v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg underline" />
         </div>
 
-        <div v-if="tool.name === 'File'">
-          <input type="file" accept=".pdf/*" class="w-full p-2 border rounded-lg" />
+        <div v-if="activeEditorTool.name === 'List'">
+          <div class="flex gap-2 mb-2">
+            <input v-model="newListItem" placeholder="Enter list item..." class="w-full p-2 border rounded-lg" />
+            <button @click="addListItem" class="bg-blue-500 text-white p-2 rounded-lg">
+              Add Item
+            </button>
+          </div>
+
+          <ul class="list-disc pl-5">
+            <li v-for="(item, index) in activeEditorTool.listItems" :key="index">
+              {{ item }}
+              <button @click="removeListItem(index)" class="text-red-500 ml-2">x</button>
+            </li>
+          </ul>
         </div>
 
+
+
+        <div v-if="activeEditorTool.name === 'Image'">
+          <input type="file" @change="handleImageUpload" class="w-full p-2 border rounded-lg" />
+        </div>
 
 
 
       </div>
     </div>
-
   </div>
 </template>
-
 <script>
 import { Icon } from '@iconify/vue';
 
@@ -115,6 +138,9 @@ export default {
     return {
       isSidebarOpen: true,
       activeTools: [],
+      activeEditorTool: null,
+      selectedTool: null,
+      newListItem: "",
       tools: [
         {
           name: "Text",
@@ -144,6 +170,7 @@ export default {
 
           ],
         },
+
         {
           name: "Design",
           isOpen: true,
@@ -155,10 +182,10 @@ export default {
             { name: "Page Break", icon: "icomoon-free:pagebreak" },
             { name: "Separator", icon: "ri:separator" },
 
-
           ],
         },
       ],
+
     };
   },
   methods: {
@@ -168,18 +195,60 @@ export default {
     toggleTool(tool) {
       tool.isOpen = !tool.isOpen;
     },
-    addSubTool(subTool) {
-      if (!this.activeTools.some(activeTool => activeTool.name === subTool.name)) {
-        this.activeTools.push(subTool);
+    // openEditor(subTool) {
+    //   if (!this.activeTools.some(tool => tool.name === subTool.name)) {
+    //     this.activeTools.push(subTool);
+    //   }
+    //   this.activeEditorTool = subTool;
+    // },
+    openEditor(tool) {
+      if (!this.activeTools.includes(tool)) {
+        this.activeTools.push(tool);
+      }
+      this.selectedTool = tool;
+      this.activeEditorTool = tool;
+    },
+    // removeTool(tool) {
+    //   this.activeTools = this.activeTools.filter(activeTool => activeTool.name !== tool.name);
+    //   if (this.activeEditorTool && this.activeEditorTool.name === tool.name) {
+    //     this.activeEditorTool = null;
+    //   }
+    // },
+
+
+    removeTool(tool) {
+      this.activeTools = this.activeTools.filter(
+        (activeTool) => activeTool.name !== tool.name
+      );
+      if (this.selectedTool && this.selectedTool.name === tool.name) {
+        this.selectedTool = null;
+        this.activeEditorTool = null;
       }
     },
-    removeTool(tool) {
-      this.activeTools = this.activeTools.filter(activeTool => activeTool.name !== tool.name);
+
+    addListItem() {
+      if (this.newListItem.trim()) {
+        this.activeEditorTool.listItems.push(this.newListItem.trim());
+        this.newListItem = "";
+      }
+    },
+    removeListItem(index) {
+      this.activeEditorTool.listItems.splice(index, 1);
+    },
+
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.activeEditorTool.imageSrc = e.target.result; 
+        };
+        reader.readAsDataURL(file);
+      }
     },
   },
 };
 </script>
-
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
@@ -204,7 +273,8 @@ export default {
   opacity: 0;
 }
 
-.tool-preview-section {
+.tool-preview-section,
+.editor-section {
   background: #f9f9f9;
   border-radius: 8px;
   padding: 20px;
