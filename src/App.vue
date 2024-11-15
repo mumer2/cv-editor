@@ -3,10 +3,10 @@
     <div>
       <button @click="toggleSidebar" class="fixed top-4 left-4 z-30 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
-          <i class="pi pi-times" style="font-size: 1.2rem; color:black"></i>
+          <i class="pi pi-times" style="font-size: 1rem; color:black"></i>
         </span>
         <span v-else>
-          <i class="pi pi-align-justify" style="font-size: 1.5rem; color:black"></i>
+          <i class="pi pi-bars" style="font-size: 1rem; color:black"></i>
         </span>
       </button>
     </div>
@@ -14,8 +14,8 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="fixed inset-y-0 left-[26px] w-[350px] text-white shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
-          <h2 class="text-xl font-bold text-center text-black">Tools</h2>
+          class="fixed inset-y-0 left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
             <input id="id-s01" type="search" name="id-s01" placeholder="Search here" aria-label="Search content"
@@ -43,12 +43,14 @@
       </transition>
     </div>
 
+    <!-- Preview -->
+
     <div :class="{
       'flex-1': true,
-      'ml-20': !isSidebarOpen,
-      'ml-[380px]': isSidebarOpen,
-    }" class="preview-section p-4">
-      <h2 class="text-xl font-bold text-center text-black">Preview</h2>
+      'ml-0': !isSidebarOpen,
+      'ml-[350px]': isSidebarOpen,
+    }" class="preview-section border border-gray-300 p-4">
+      <h2 class="text-sm font-bold text-center text-black">Preview</h2>
 
       <div v-for="(tool, index) in activeTools" :key="index" class="tool-preview-section">
         <div class="flex justify-between items-center mb-4">
@@ -68,13 +70,27 @@
           <u>{{ tool.content }}</u>
         </div>
 
-        <div v-if="tool.name === 'List'">
-          <ul class="list-disc pl-5">
-            <li v-for="(item, index) in tool.listItems" :key="index">
-              {{ item }}
-            </li>
-          </ul>
-        </div>
+       <!-- List -->
+  <div v-if="tool.name === 'List'">
+    <ul class="list-disc pl-5">
+      <li v-for="(item, index) in tool.listItems" :key="index">
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+
+         <!-- Quote -->
+  <div v-if="tool.name === 'Quote'">
+    <blockquote class="italic border-l-4 border-gray-300 pl-4">{{ tool.content }}</blockquote>
+  </div>
+   <!-- Code -->
+   <div v-if="tool.name === 'Code'">
+    <pre class="bg-gray-100 p-2 rounded">{{ tool.content }}</pre>
+  </div>
+    <!-- Buttons -->
+    <div v-if="tool.name === 'Buttons'">
+    <button class="px-4 py-2 bg-blue-500 text-white rounded">{{ tool.content }}</button>
+  </div>
 
         <div v-if="activeEditorTool.imageSrc" class="mt-4">
           <img :src="activeEditorTool.imageSrc" alt="Uploaded Preview" class="max-w-full h-auto rounded-lg">{{
@@ -84,37 +100,52 @@
 
     </div>
 
-    <div v-if="activeEditorTool" class="editor-section border-2 border-gray-200 p-4 w-[400px]">
-      <h2 class="text-xl font-bold text-center text-black">Editor</h2>
+    <!-- Editor -->
+
+    <div v-if="activeEditorTool" class="editor-section border-2 border-gray-200 p-4 w-[300px]">
+      <h2 class="text-sm font-bold text-center text-black">Editor</h2>
       <div class="editor-content">
-        <span>Editing: {{ activeEditorTool.name }}</span>
+        <span class="text-xs">Editing: {{ activeEditorTool.name }}</span>
         <div v-if="activeEditorTool.name === 'Paragraph'">
-          <textarea v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg"></textarea>
+          <textarea v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
         </div>
         <div v-if="activeEditorTool.name === 'Heading'">
-          <input v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg font-bold text-xl" />
+          <input v-model="activeEditorTool.content"
+            class="w-full p-2 border border-gray-300 rounded-lg font-bold text-xl" />
         </div>
 
         <div v-if="activeEditorTool.name === 'Underline'">
-          <input v-model="activeEditorTool.content" class="w-full p-2 border rounded-lg underline" />
+          <input v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg underline" />
         </div>
 
-        <div v-if="activeEditorTool.name === 'List'">
-          <div class="flex gap-2 mb-2">
-            <input v-model="newListItem" placeholder="Enter list item..." class="w-full p-2 border rounded-lg" />
-            <button @click="addListItem" class="bg-blue-500 text-white p-2 rounded-lg">
-              Add Item
-            </button>
-          </div>
+      <!-- List -->
+    <div v-if="activeEditorTool.name === 'List'">
+      <div class="flex gap-2 mb-2">
+        <input v-model="newListItem" placeholder="Enter list item..." class="w-full p-2 border border-gray-300 rounded-lg" />
+        <button @click="addListItem" class="bg-blue-500 text-white p-2 rounded-lg">Add Item</button>
+      </div>
+      <ul class="list-disc pl-5">
+        <li v-for="(item, index) in activeEditorTool.listItems" :key="index">
+          {{ item }}
+          <button @click="removeListItem(index)" class="text-red-500 ml-2">x</button>
+        </li>
+      </ul>
+    </div>
 
-          <ul class="list-disc pl-5">
-            <li v-for="(item, index) in activeEditorTool.listItems" :key="index">
-              {{ item }}
-              <button @click="removeListItem(index)" class="text-red-500 ml-2">x</button>
-            </li>
-          </ul>
-        </div>
+         <!-- Quote -->
+    <div v-if="activeEditorTool.name === 'Quote'">
+      <textarea v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg italic"></textarea>
+    </div>
 
+     <!-- Code -->
+     <div v-if="activeEditorTool.name === 'Code'">
+      <textarea v-model="activeEditorTool.content" class="w-full p-2 bg-gray-100 border border-gray-300 rounded-lg"></textarea>
+    </div>
+
+     <!-- Buttons -->
+     <div v-if="activeEditorTool.name === 'Buttons'">
+      <input v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Button Text" />
+    </div>
 
 
         <div v-if="activeEditorTool.name === 'Image'">
@@ -226,22 +257,12 @@ export default {
       }
     },
 
-    addListItem() {
-      if (this.newListItem.trim()) {
-        this.activeEditorTool.listItems.push(this.newListItem.trim());
-        this.newListItem = "";
-      }
-    },
-    removeListItem(index) {
-      this.activeEditorTool.listItems.splice(index, 1);
-    },
-
     handleImageUpload(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.activeEditorTool.imageSrc = e.target.result; 
+          this.activeEditorTool.imageSrc = e.target.result;
         };
         reader.readAsDataURL(file);
       }
@@ -252,7 +273,7 @@ export default {
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease;
+  transition: transform 0.6s ease;
 }
 
 .slide-enter-from {
@@ -276,7 +297,6 @@ export default {
 .tool-preview-section,
 .editor-section {
   background: #f9f9f9;
-  border-radius: 8px;
   padding: 20px;
 }
 </style>
