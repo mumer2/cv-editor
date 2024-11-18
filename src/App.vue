@@ -23,15 +23,15 @@
           </div>
 
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
-            <button @click="toggleTool(tool)" class="flex justify-between w-full py-2 px-4 text-black rounded ">
+            <button @click="toggleTool(tool)" class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
               <span class="text-gray-600">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="text-black"></i>
+              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" style="font-size: 0.7rem" class="text-black"></i>
             </button>
 
             <transition name="fade">
               <div v-if="tool.isOpen" class="grid grid-cols-3 gap-3">
                 <div v-for="(subTool, subIndex) in tool.subTools" :key="subIndex"
-                  class="flex flex-col gap-2 cursor-pointer text-xs items-center p-2 border text-black rounded hover:bg-gray-100"
+                  class="flex flex-col gap-2 cursor-pointer text-xs items-center p-2 border text-black rounded hover:bg-slate-200"
                   @click="openEditor(subTool)">
                   <Icon :icon="subTool.icon" class="text-2xl" />
                   <span>{{ subTool.name }}</span>
