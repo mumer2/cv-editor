@@ -19,7 +19,7 @@
 
           <div class="relative my-6">
             <input id="id-s01" type="search" name="id-s01" placeholder="Search here" aria-label="Search content"
-              class="peer relative h-10 w-full border-b border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
+              class="peer relative h-10 w-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
@@ -44,8 +44,6 @@
         </div>
       </transition>
     </div>
-
-    <!-- Preview -->
 
     <div :class="{
       'flex-1': true,
@@ -101,8 +99,6 @@
       </div>
 
     </div>
-
-    <!-- Editor -->
 
     <div v-if="activeEditorTool" class="editor-section border-2 border-gray-200 p-4 w-[300px]">
       <h2 class="text-sm font-bold text-center text-black">Editor</h2>

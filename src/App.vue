@@ -1,24 +1,18 @@
 <template>
   <Navbar/>
   <div class="pt-14">
-    <Home/>
+  <RouterView />
+
   </div>
 </template>
 <script>
+import {RouterView } from 'vue-router'
 import { Icon } from '@iconify/vue';
 import Navbar from './components/Navbar.vue'
-import Home from './components/Home.vue';
 export default {
   components: {
     Icon,
     Navbar,
-    Home,
   },
 }
 </script>
-
-<style scoped>
-body {
-  padding-top: 4rem; 
-}
-</style>
