@@ -54,7 +54,6 @@
 
       <div v-for="(tool, index) in activeTools" :key="index" class="tool-preview-section">
         <div class="flex justify-between items-center mb-4">
-          <!-- <span>{{ tool.name }}</span> -->
           <button @click="removeTool(tool)" class="text-red-500 hover:text-red-700">
             <i class="pi pi-times" style="font-size: 1rem;"></i>
           </button>
