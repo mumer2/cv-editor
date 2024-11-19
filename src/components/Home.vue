@@ -14,7 +14,7 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class=" inset-y-0 left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
@@ -25,9 +25,9 @@
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
             <button @click="toggleTool(tool)"
               class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
-              <span class="text-gray-600">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" style="font-size: 0.7rem"
-                class="text-black"></i>
+              <span class="text-gray-600 text-sm">{{ tool.name }}</span>
+              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>
 
             <transition name="fade">
@@ -162,6 +162,7 @@
 
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -268,7 +269,7 @@ export default {
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.5s ease;
+  transition: transform 0.1s ease;
 }
 
 .slide-enter-from {
@@ -281,7 +282,7 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,
@@ -293,5 +294,51 @@ export default {
 .editor-section {
   background: #f9f9f9;
   padding: 20px;
+}
+
+.sidebar {
+  width: 350px;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e7eb;
+}
+
+.content-area {
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    width: 50%;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    width: 75%;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1px;
 }
 </style>
