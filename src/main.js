@@ -1,6 +1,5 @@
 import './assets/main.css'
 import 'primeicons/primeicons.css'
-import ColorPicker from 'primevue/colorpicker';
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -8,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 import  PrimeVue  from 'primevue/config';
 import Aura from '@primevue/themes/aura'
-
+// import router from "./router";
 const app = createApp(App)
 
 app.use(createPinia())
@@ -21,3 +20,4 @@ app.use(PrimeVue,{
 });
 
 app.mount('#app')
+// createApp(App).use(router).mount("#app");

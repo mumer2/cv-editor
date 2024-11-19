@@ -1,12 +1,12 @@
 <template>
   <div class="flex h-screen">
     <div>
-      <button @click="toggleSidebar" class="fixed top-4 left-4 z-30 p-2 rounded-lg focus:outline-none">
+      <button @click="toggleSidebar" class="absolute top-[63px] left-2 z-30 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
-          <i class="pi pi-times" style="font-size: 1.5rem; color:black"></i>
+          <i class="pi pi-times" style="font-size: 1rem; color:black"></i>
         </span>
         <span v-else>
-          <i class="pi pi-align-justify" style="font-size: 1.5rem; color:black"></i>
+          <i class="pi pi-bars" style="font-size: 1rem; color:black"></i>
         </span>
       </button>
     </div>
@@ -14,8 +14,8 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="fixed inset-y-0 left-20 w-[350px] text-white shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
-          <h2 class="text-xl font-bold text-center text-black">Tools</h2>
+          class=" inset-y-0 left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
             <input id="id-s01" type="search" name="id-s01" placeholder="Search here" aria-label="Search content"
@@ -23,16 +23,18 @@
           </div>
 
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
-            <button @click="toggleTool(tool)" class="flex justify-between w-full py-2 px-4 text-black rounded ">
+            <button @click="toggleTool(tool)"
+              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
               <span class="text-gray-600">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="text-black"></i>
+              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" style="font-size: 0.7rem"
+                class="text-black"></i>
             </button>
 
             <transition name="fade">
               <div v-if="tool.isOpen" class="grid grid-cols-3 gap-3">
                 <div v-for="(subTool, subIndex) in tool.subTools" :key="subIndex"
-                  class="flex flex-col cursor-pointer text-xs items-center p-2 border text-black rounded hover:bg-gray-100"
-                  @click="addSubTool(subTool)">
+                  class="flex flex-col gap-2 cursor-pointer text-xs items-center p-2 text-black rounded hover:bg-slate-200"
+                  @click="openEditor(subTool)">
                   <Icon :icon="subTool.icon" class="text-2xl" />
                   <span>{{ subTool.name }}</span>
                 </div>
@@ -43,18 +45,14 @@
       </transition>
     </div>
 
-    <!-- <div
-      v-if="isSidebarOpen"
-      class="fixed inset-0 bg-black opacity-0 z-10"
-      @click="toggleSidebar"
-    ></div> -->
+    <!-- Preview -->
 
     <div :class="{
       'flex-1': true,
-      'ml-20': !isSidebarOpen,
-      'ml-[450px]': isSidebarOpen,
-    }" class="preview-section p-4">
-      <h2 class="text-xl font-bold text-center text-black">Preview</h2>
+      'ml-0': !isSidebarOpen,
+      'ml-0': isSidebarOpen,
+    }" class="preview-section border border-gray-300 p-4">
+      <h2 class="text-sm font-bold text-center text-black">Preview</h2>
 
       <div v-for="(tool, index) in activeTools" :key="index" class="tool-preview-section">
         <div class="flex justify-between items-center mb-4">
@@ -63,51 +61,113 @@
             <i class="pi pi-times" style="font-size: 1rem;"></i>
           </button>
         </div>
-
-        <!-- Inserted tools -->
         <div v-if="tool.name === 'Paragraph'">
-          <textarea type="text" placeholder="Enter your text..." class="w-full p-2 border rounded-lg"></textarea>
+          <p>{{ tool.content }}</p>
         </div>
-
         <div v-if="tool.name === 'Heading'">
-          <input type="text" placeholder="Enter your text..."
-            class="w-full p-2 border rounded-lg font-bold text-xl"></input>
+          <h1 class="font-bold text-xl">{{ tool.content }}</h1>
         </div>
 
         <div v-if="tool.name === 'Underline'">
-          <input type="text" placeholder="Enter your text..." class="w-full p-2 border underline rounded-lg"></input>
+          <u>{{ tool.content }}</u>
         </div>
 
+        <!-- List -->
         <div v-if="tool.name === 'List'">
-          <textarea type="text" placeholder="Enter your text..." rows="6"
-            class="w-full p-2 border rounded-lg"></textarea>
+          <ul class="list-disc pl-5">
+            <li v-for="(item, index) in tool.listItems" :key="index">
+              {{ item }}
+            </li>
+          </ul>
         </div>
 
-        <div v-if="tool.name === 'Image'">
-          <input type="file" accept=".jpg/*" class="w-full p-2 border rounded-lg" />
+        <!-- Quote -->
+        <div v-if="tool.name === 'Quote'">
+          <blockquote class="italic border-l-4 border-gray-300 pl-4">{{ tool.content }}</blockquote>
+        </div>
+        <!-- Code -->
+        <div v-if="tool.name === 'Code'">
+          <pre class="bg-gray-100 p-2 rounded">{{ tool.content }}</pre>
+        </div>
+        <!-- Buttons -->
+        <div v-if="tool.name === 'Buttons'">
+          <button class="px-4 py-2 bg-blue-500 text-white rounded">{{ tool.content }}</button>
         </div>
 
-        <div v-if="tool.name === 'Cover'">
-          <input type="file" accept=".jpg,.png/*" class="w-full p-2 border rounded-lg" />
+        <div v-if="activeEditorTool.imageSrc" class="mt-4">
+          <img :src="activeEditorTool.imageSrc" alt="Uploaded Preview" class="max-w-full h-auto rounded-lg">{{
+            tool.content }}</img>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Editor -->
+
+    <div v-if="activeEditorTool" class="editor-section border-2 border-gray-200 p-4 w-[300px]">
+      <h2 class="text-sm font-bold text-center text-black">Editor</h2>
+      <div class="editor-content">
+        <span class="text-xs">Editing: {{ activeEditorTool.name }}</span>
+        <div v-if="activeEditorTool.name === 'Paragraph'">
+          <textarea v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
+        </div>
+        <div v-if="activeEditorTool.name === 'Heading'">
+          <input v-model="activeEditorTool.content"
+            class="w-full p-2 border border-gray-300 rounded-lg font-bold text-xl" />
         </div>
 
-        <div v-if="tool.name === 'File'">
-          <input type="file" accept=".pdf/*" class="w-full p-2 border rounded-lg" />
+        <div v-if="activeEditorTool.name === 'Underline'">
+          <input v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg underline" />
         </div>
 
+        <!-- List -->
+        <div v-if="activeEditorTool.name === 'List'">
+          <div class="flex gap-2 mb-2">
+            <input v-model="newListItem" placeholder="Enter list item..."
+              class="w-full p-2 border border-gray-300 rounded-lg" />
+            <button @click="addListItem" class="bg-blue-500 text-white p-2 rounded-lg">Add Item</button>
+          </div>
+          <ul class="list-disc pl-5">
+            <li v-for="(item, index) in activeEditorTool.listItems" :key="index">
+              {{ item }}
+              <button @click="removeListItem(index)" class="text-red-500 ml-2">x</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Quote -->
+        <div v-if="activeEditorTool.name === 'Quote'">
+          <textarea v-model="activeEditorTool.content"
+            class="w-full p-2 border border-gray-300 rounded-lg italic"></textarea>
+        </div>
+
+        <!-- Code -->
+        <div v-if="activeEditorTool.name === 'Code'">
+          <textarea v-model="activeEditorTool.content"
+            class="w-full p-2 bg-gray-100 border border-gray-300 rounded-lg"></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div v-if="activeEditorTool.name === 'Buttons'">
+          <input v-model="activeEditorTool.content" class="w-full p-2 border border-gray-300 rounded-lg"
+            placeholder="Button Text" />
+        </div>
+
+
+        <div v-if="activeEditorTool.name === 'Image'">
+          <input type="file" @change="handleImageUpload" class="w-full p-2 border rounded-lg" />
+        </div>
 
 
 
       </div>
     </div>
-
   </div>
 </template>
-
 <script>
 import { Icon } from '@iconify/vue';
-
 export default {
+  name: "Home",
   components: {
     Icon,
   },
@@ -115,6 +175,9 @@ export default {
     return {
       isSidebarOpen: true,
       activeTools: [],
+      activeEditorTool: null,
+      selectedTool: null,
+      newListItem: "",
       tools: [
         {
           name: "Text",
@@ -136,7 +199,7 @@ export default {
         },
         {
           name: "Media",
-          isOpen: true,
+          isOpen: false,
           subTools: [
             { name: "Image", icon: "mdi:image" },
             { name: "Cover", icon: "dashicons:cover-image" },
@@ -144,9 +207,10 @@ export default {
 
           ],
         },
+
         {
           name: "Design",
-          isOpen: true,
+          isOpen: false,
           subTools: [
             { name: "Buttons", icon: "mdi:button" },
             { name: "Column", icon: "mingcute:column-line" },
@@ -158,6 +222,7 @@ export default {
           ],
         },
       ],
+
     };
   },
   methods: {
@@ -167,22 +232,43 @@ export default {
     toggleTool(tool) {
       tool.isOpen = !tool.isOpen;
     },
-    addSubTool(subTool) {
-      if (!this.activeTools.some(activeTool => activeTool.name === subTool.name)) {
-        this.activeTools.push(subTool);
+
+    openEditor(tool) {
+      if (!this.activeTools.includes(tool)) {
+        this.activeTools.push(tool);
+      }
+      this.selectedTool = tool;
+      this.activeEditorTool = tool;
+    },
+
+
+    removeTool(tool) {
+      this.activeTools = this.activeTools.filter(
+        (activeTool) => activeTool.name !== tool.name
+      );
+      if (this.selectedTool && this.selectedTool.name === tool.name) {
+        this.selectedTool = null;
+        this.activeEditorTool = null;
       }
     },
-    removeTool(tool) {
-      this.activeTools = this.activeTools.filter(activeTool => activeTool.name !== tool.name);
+
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.activeEditorTool.imageSrc = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     },
   },
 };
 </script>
-
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .slide-enter-from {
@@ -203,9 +289,9 @@ export default {
   opacity: 0;
 }
 
-.tool-preview-section {
+.tool-preview-section,
+.editor-section {
   background: #f9f9f9;
-  border-radius: 8px;
   padding: 20px;
 }
 </style>
