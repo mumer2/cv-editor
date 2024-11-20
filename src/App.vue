@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { RouterView } from 'vue-router'
+// import { RouterView } from 'vue-router'
 import { Icon } from '@iconify/vue';
 import Navbar from './components/Navbar.vue'
 export default {

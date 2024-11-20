@@ -69,15 +69,6 @@
                       <span class="text-sm">Table</span>
                     </button>
                   
-                    <button @click="openListConfigPopup"
-                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span>
-                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
-                      </span>
-                      <span class="text-sm">List</span>
-                    </button>
-                   
-
                   </div>
                 </div>
               </div>
@@ -110,16 +101,6 @@
         <HeadingPopup :headingLevel="heading.level" :headingContent="heading.content" :headingStyle="heading.style"
           @update-content="updateHeadingContent(index, $event)" @delete="deleteHeading(index)" />
       </div>
-
-      
-      <div v-for="(list, index) in lists" :key="index">
-      <ListComponent
-        :listType="list.type"
-        :listItems="list.items"
-        @update-content="updateListContent(index, $event)"
-        @delete="deleteList(index)"
-      />
-    </div>
     </div>
 
 
@@ -141,8 +122,6 @@
     <!-- Table Configuration Popup -->
     <TableConfigPopup :show="showTableConfigPopup" @close="closeTableConfigPopup" @create="createTable" />
   
-    <!-- List Configuration Popup -->
-    <ListConfigPopup v-if="showListConfigPopup" :show="showListConfigPopup" @close="showListConfigPopup = false" @create-list="addList" />
   </div>
 </template>
 
@@ -154,8 +133,6 @@ import HeadingPopup from './HeadingPopup.vue';
 import HeadingConfigPopup from './HeadingConfigPopup.vue';
 import ParagraphConfigPopup from './ParagraphConfigPopup .vue';
 import ParagraphPopup from './ParagraphPopup.vue';
-import ListComponent from './ListComponent.vue';
-import ListConfigPopup from './ListConfigPopup.vue';
 
 export default {
   name: "Home",
@@ -166,8 +143,6 @@ export default {
     HeadingConfigPopup,
     ParagraphConfigPopup,
     ParagraphPopup,
-    ListComponent,
-    ListConfigPopup,
     Icon
   },
   data() {
@@ -180,8 +155,6 @@ export default {
       showParagraphConfigPopup: false,
       paragraph: [],
       tableData: [],
-      showListConfigPopup: false,
-      lists: [],
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -282,27 +255,13 @@ export default {
     deleteHeading(index) {
       this.headings.splice(index, 1);
     },
-
-    // List
-
-    openListConfigPopup() {
-      this.showListConfigPopup = true; // Show popup
-    },
-    addList(newList) {
-      // Add a new list to the `lists` array
-      this.lists.push(newList);
-      this.showListConfigPopup = false; // Close popup
-    },
-    updateListContent(index, updatedData) {
-      this.lists[index] = { ...this.lists[index], ...updatedData }; // Update list data
-    },
-    deleteList(index) {
-      this.lists.splice(index, 1); // Remove list from the array
-    },
-
     
+
+
   },
 };
 </script>
 
-
+<style scoped>
+/* Add additional styling as necessary */
+</style>
