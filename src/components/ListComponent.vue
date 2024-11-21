@@ -11,7 +11,7 @@
             v-model="listItems[index]"
             placeholder="Enter item content"
           />
-          <button @click="deleteItem(index)">Delete</button>
+          <button @click="deleteItem(index)"><Icon icon="basil:cross-outline" style="font-size: 20px;" /></button>
         </li>
       </component>
       <button @click="addItem">Add Item</button>

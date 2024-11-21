@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-screen">
-    <!-- Sidebar for selecting tools -->
+    
     <div>
       <button @click="toggleSidebar" class="absolute top-[63px] left-2 z-30 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
@@ -11,20 +11,6 @@
         </span>
       </button>
     </div>
-
-    <!-- <div v-if="isSidebarOpen" class="sidebar inset-y-0 left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
-      <h2 class="text-sm font-bold text-center text-black">Tools</h2>
-      <div class="grid grid-cols-3 gap-2">
-        <button @click="openTableConfigPopup" class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-          <span>Table</span>
-          <span>Table</span>
-      </button>
-      <button @click="openTableConfigPopup" class="py-2 px-4 text-black rounded hover:bg-slate-200">
-        Table
-      </button>
-      </div>
-      
-    </div> -->
 
     <div>
       <transition name="slide">
@@ -51,7 +37,9 @@
                   <div class="grid grid-cols-3 gap-3">
                     <button @click="openParagraphConfigPopup"
                       class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span><Icon icon="ci:paragraph" style="color: black;font-size: 26px;" /></span>
+                      <span>
+                        <Icon icon="ci:paragraph" style="color: black;font-size: 26px;" />
+                      </span>
                       <span class="text-sm">Paragraph</span>
                     </button>
                     <button @click="openHeadingConfigPopup"
@@ -68,15 +56,30 @@
                       </span>
                       <span class="text-sm">Table</span>
                     </button>
-                  
+
                     <button @click="openListConfigPopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
-                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
+                        <Icon icon="cuida:list-outline" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">List</span>
                     </button>
-                   
+
+                    <button @click="openUnderlineConfigPopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="tabler:underline" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Underline</span>
+                    </button>
+
+                    <button @click="openPopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="unjs:theme-colors" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Color style</span>
+                    </button>
 
                   </div>
                 </div>
@@ -95,54 +98,75 @@
       <h2 class="text-sm font-bold text-center text-black">Preview</h2>
 
 
-       <!-- Paragraph Component -->
-       <div v-for="(paragraph, index) in paragraph" :key="index">
+      <!-- Paragraph Component -->
+      <div v-for="(paragraph, index) in paragraph" :key="index">
         <ParagraphPopup :paragraphContent="paragraph.content" :paragraphStyle="paragraph.style"
           @update-content="updateParagraphContent(index, $event)" @delete="deleteParagraph(index)" />
       </div>
-      
+
       <!-- Table Component -->
-      <TablePopup v-if="tableData.length > 0" :rows="tableData" :columns="columns" :showTable="showTable" @delete="deleteTable(index)" />
+      <TablePopup v-if="tableData.length > 0" :rows="tableData" :columns="columns" :showTable="showTable"
+        @delete="deleteTable(index)" />
 
       <!-- Heading Component -->
-
       <div v-for="(heading, index) in headings" :key="index">
         <HeadingPopup :headingLevel="heading.level" :headingContent="heading.content" :headingStyle="heading.style"
           @update-content="updateHeadingContent(index, $event)" @delete="deleteHeading(index)" />
       </div>
 
-      
+      <!-- List Component -->
       <div v-for="(list, index) in lists" :key="index">
-      <ListComponent
-        :listType="list.type"
-        :listItems="list.items"
-        @update-content="updateListContent(index, $event)"
-        @delete="deleteList(index)"
-      />
+        <ListComponent :listType="list.type" :listItems="list.items" @update-content="updateListContent(index, $event)"
+          @delete="deleteList(index)" />
+      </div>
+
+      <!-- Underline Component -->
+      <div v-for="(underline, index) in underlines" :key="index">
+        <UnderlineComponent :text="underline.text" :styleType="underline.style"
+          @update-content="updateUnderline(index, $event)" @delete="deleteUnderline(index)" />
+      </div>
+
+      <!-- Color Style Component -->
+      <div v-for="(item, index) in styledTextList" :key="index" class="flex items-center gap-2">
+        <span
+          :style="{ color: item.color, fontStyle: item.style === 'italic' ? 'italic' : 'normal', fontWeight: item.style === 'bold' ? 'bold' : 'normal' }"
+          contenteditable="true" @input="updateText(index, $event)">
+          {{ item.text }}
+        </span>
+
+        <button @click="deleteText(index)">
+          <Icon icon="basil:cross-outline" style="font-size: 20px;" />
+        </button>
+      </div>
     </div>
-    </div>
+
 
 
     <!-- Editor Section -->
     <div v-if="editorToolActive" class="editor-section border-2 border-gray-200 p-4 w-[300px]">
       <h2 class="text-sm font-bold text-center text-black">Editor</h2>
-      <!-- <div class="editor-content">
-        <span class="text-xs">Editing Table</span>
-        <TablePopup v-if="tableData.length > 0" :rows="tableData" :columns="columns" :showTable="showTable" />
-      </div> -->
     </div>
-    
-     <!-- Paragraph Configuration Popup -->
-     <ParagraphConfigPopup :show="showParagraphConfigPopup" @close="closeParagraphConfigPopup" @create="createParagraph" />
-    
+
+    <!-- Paragraph Configuration Popup -->
+    <ParagraphConfigPopup :show="showParagraphConfigPopup" @close="closeParagraphConfigPopup"
+      @create="createParagraph" />
+
     <!-- Heading Configuration Popup -->
     <HeadingConfigPopup :show="showHeadingConfigPopup" @close="closeHeadingConfigPopup" @create="createHeading" />
-    
+
     <!-- Table Configuration Popup -->
     <TableConfigPopup :show="showTableConfigPopup" @close="closeTableConfigPopup" @create="createTable" />
-  
+
     <!-- List Configuration Popup -->
-    <ListConfigPopup v-if="showListConfigPopup" :show="showListConfigPopup" @close="showListConfigPopup = false" @create-list="addList" />
+    <ListConfigPopup v-if="showListConfigPopup" :show="showListConfigPopup" @close="showListConfigPopup = false"
+      @create-list="addList" />
+
+    <!-- Underline Configuration Popup -->
+    <UnderlineConfigPoup v-if="showUnderlineConfigPopup" @create-underline="addUnderline"
+      @close="showUnderlineConfigPopup = false" />
+
+    <!-- Color Popup -->
+    <TextStylePopup :show="isPopupVisible" @create-styled-text="addStyledText" @close="closePopup" />
   </div>
 </template>
 
@@ -156,10 +180,15 @@ import ParagraphConfigPopup from './ParagraphConfigPopup .vue';
 import ParagraphPopup from './ParagraphPopup.vue';
 import ListComponent from './ListComponent.vue';
 import ListConfigPopup from './ListConfigPopup.vue';
+import UnderlineConfigPoup from './UnderlineConfigPoup.vue';
+import UnderlineComponent from './UnderlineComponent.vue';
+import TextStylePopup from './TextStylePopup.vue';
+
 
 export default {
   name: "Home",
   components: {
+    Icon,
     TablePopup,
     TableConfigPopup,
     HeadingPopup,
@@ -168,7 +197,9 @@ export default {
     ParagraphPopup,
     ListComponent,
     ListConfigPopup,
-    Icon
+    UnderlineConfigPoup,
+    UnderlineComponent,
+    TextStylePopup,
   },
   data() {
     return {
@@ -182,6 +213,10 @@ export default {
       tableData: [],
       showListConfigPopup: false,
       lists: [],
+      showUnderlineConfigPopup: false,
+      underlines: [],
+      isPopupVisible: false,
+      styledTextList: [],
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -192,20 +227,6 @@ export default {
         {
           name: "Text",
           isOpen: true,
-          subTools: [
-            { name: "Paragraph", icon: "mdi:format-paragraph" },
-            { name: "Heading", icon: "mdi:bookmark-outline" },
-            { name: "Underline", icon: "mdi:format-underline" },
-            { name: "List", icon: "mdi:format-list-bulleted" },
-            { name: "Quote", icon: "mdi:format-quote-close" },
-            { name: "Code", icon: "mdi:code-tags" },
-            { name: "Details", icon: "mdi:view-list-outline" },
-            { name: "Preformatted", icon: "mdi:code-braces" },
-            { name: "Pullquote", icon: "mdi:format-quote-open" },
-            { name: "Table", icon: "mdi:grid-large" },
-            { name: "Verse", icon: "mdi:leaf" },
-            { name: "Classic", icon: "mdi:keyboard-outline" },
-          ],
         },
       ],
     };
@@ -219,18 +240,15 @@ export default {
     },
 
     // Paragraph
-
     openParagraphConfigPopup() {
       this.showParagraphConfigPopup = true;
     },
-
     closeParagraphConfigPopup() {
       this.showParagraphConfigPopup = false;
     },
     createParagraph({ style }) {
       this.paragraph.push({ style, content: "Sample Paragraph" });
     },
-
     updateParagraphContent(index, content) {
       this.paragraph[index].content = content;
     },
@@ -239,15 +257,12 @@ export default {
     },
 
     // Table
-
     openTableConfigPopup() {
       this.showTableConfigPopup = true;
     },
-
     closeTableConfigPopup() {
       this.showTableConfigPopup = false;
     },
-
     createTable(data, columns) {
       this.tableData = data;
       this.columns = columns;
@@ -257,25 +272,20 @@ export default {
     deleteTable(index) {
       this.tableData.splice(index, 1);
     },
-
     toggleEditor() {
       this.editorToolActive = !this.editorToolActive;
     },
 
     // Heading
-
     openHeadingConfigPopup() {
       this.showHeadingConfigPopup = true;
     },
-
     closeHeadingConfigPopup() {
       this.showHeadingConfigPopup = false;
     },
-
     createHeading({ level, style }) {
       this.headings.push({ level, style, content: "Sample Heading" });
     },
-
     updateHeadingContent(index, content) {
       this.headings[index].content = content;
     },
@@ -284,25 +294,129 @@ export default {
     },
 
     // List
-
     openListConfigPopup() {
-      this.showListConfigPopup = true; // Show popup
+      this.showListConfigPopup = true; 
     },
     addList(newList) {
-      // Add a new list to the `lists` array
       this.lists.push(newList);
-      this.showListConfigPopup = false; // Close popup
+      this.showListConfigPopup = false; 
     },
     updateListContent(index, updatedData) {
-      this.lists[index] = { ...this.lists[index], ...updatedData }; // Update list data
+      this.lists[index] = { ...this.lists[index], ...updatedData }; 
     },
     deleteList(index) {
-      this.lists.splice(index, 1); // Remove list from the array
+      this.lists.splice(index, 1); 
     },
 
-    
+    // Underline
+    openUnderlineConfigPopup() {
+      this.showUnderlineConfigPopup = true;
+    },
+    addUnderline(newUnderline) {
+      this.underlines.push(newUnderline); 
+      this.showUnderlineConfigPopup = false;
+    },
+    updateUnderline(index, updatedData) {
+      this.$set(this.underlines, index, { ...this.underlines[index], ...updatedData });
+    },
+    deleteUnderline(index) {
+      this.underlines.splice(index, 1);
+    },
+
+    // Color
+    openPopup() {
+      this.isPopupVisible = true;
+    },
+    closePopup() {
+      this.isPopupVisible = false;
+    },
+    addStyledText(styledText) {
+      this.styledTextList.push(styledText); 
+      this.closePopup();
+    },
+    updateText(index, event) {
+      this.styledTextList[index].text = event.target.textContent;
+    },
+    deleteText(index) {
+      this.styledTextList.splice(index, 1);
+    },
   },
 };
 </script>
 
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.1s ease;
+}
 
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.tool-preview-section,
+.editor-section {
+  background: #f9f9f9;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 350px;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e7eb;
+}
+
+.content-area {
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    width: 50%;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    width: 75%;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1px;
+}
+</style>

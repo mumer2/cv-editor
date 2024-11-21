@@ -2,11 +2,7 @@
 <template>
     <div class="heading-container border-b py-2">
         <div class="action-buttons mt-2 flex space-x-2">
-        <button @click="deleteParagraph" class=" text-red-800 text-xl font-bold px-2 py-1 rounded">
-            <Icon icon="system-uicons:cross" />
-        </button>
-      </div>
-      <component
+          <component
         :is="`h${paragraphLevel}`"
         class="editable-heading"
         :class="ParagraphStyle"
@@ -15,7 +11,10 @@
       >
         {{ ParagraphContent }}
       </component>
-    
+        <button @click="deleteParagraph" class=" text-md font-bold px-2 py-1 rounded">
+            <Icon icon="system-uicons:cross" />
+        </button>
+      </div>
     </div>
   </template>
   

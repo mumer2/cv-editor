@@ -3,20 +3,22 @@
     <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
       <h3>Create a List</h3>
       <label>
-        List Type:
-        <select v-model="listType">
+        <span class="font-semibold mt-3">List Type:</span>
+        <select v-model="listType" class="w-full">
           <option value="ul">Unordered List</option>
           <option value="ol">Ordered List</option>
         </select>
       </label>
   
       <label>
-        Items (comma-separated):
-        <input v-model="items" placeholder="Enter items" />
+        <span class="font-semibold mt-3">Items (comma-separated):</span>
+        <input v-model="items" placeholder="Enter items" class="w-full" />
       </label>
   
-      <button @click="createList">Create</button>
-      <button @click="$emit('close')">Cancel</button>
+      <div class="flex justify-between mt-3">
+        <button @click="$emit('close')" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
+        <button @click="createList" class="px-4 py-2 bg-blue-500 text-white rounded">Create</button>
+      </div>
     </div>
     </div>
 
