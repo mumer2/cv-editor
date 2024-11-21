@@ -77,7 +77,7 @@
                     <button @click="openPopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
-                        <Icon icon="unjs:theme-colors" style="color: black;font-size: 26px;" />
+                        <Icon icon="ic:twotone-color-lens" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">Color style</span>
                     </button>
@@ -281,26 +281,26 @@ export default {
     return {
       isSidebarOpen: true,
       showTableConfigPopup: false,
-      activeTools: [],
       showHeadingConfigPopup: false,
-      headings: [],
       showParagraphConfigPopup: false,
-      paragraph: [],
-      tableData: [],
       showListConfigPopup: false,
-      lists: [],
       showUnderlineConfigPopup: false,
-      underlines: [],
       isPopupVisible: false,
-      styledTextList: [],
       isImagePopupVisible: false, 
-      images: [],
+      editorToolActive: false,
+      showTable: false,
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
+      activeTools: [],
+      headings: [],
+      paragraph: [],
+      tableData: [],
+      lists: [],
+      underlines: [],
+      styledTextList: [],
+      images: [],
       columns: 0,
-      showTable: false,
-      editorToolActive: false,
       tools: [
         {
           name: "Text",

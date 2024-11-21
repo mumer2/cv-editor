@@ -10,7 +10,7 @@
       <table class="min-w-full table-auto">
         <thead>
           <tr class="bg-gray-200">
-            <th v-for="col in columns" :key="col" class="px-4 py-2 border">Header {{ col + 1 }}</th>
+            <th v-for="col in columns" :key="col" class="px-4 py-2 border">Header {{ col }}</th>
           </tr>
         </thead>
         <tbody>
