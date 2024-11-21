@@ -33,7 +33,7 @@
         <div class="flex justify-between">
             <button
             @click="$emit('close')"
-            class="bg-gray-500 text-white px-4 py-2 rounded"
+            class="bg-gray-300 text-black px-4 py-2 rounded"
           >
             Cancel
           </button>

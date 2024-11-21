@@ -23,6 +23,7 @@
               class="peer relative h-10 w-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
+          <!-- Text -->
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
             <button @click="toggleTool(tool)"
               class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
@@ -86,6 +87,51 @@
               </div>
             </transition>
           </div>
+
+          <!-- Media -->
+          <div v-for="(tool2, index) in tool2s" :key="index" class="space-y-2">
+            <button @click="toggleTools(tool2s)"
+              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
+              <span class="text-gray-600 text-sm">{{ tool2.name }}</span>
+              <i :class="tool2s.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
+            </button>
+
+            <transition name="fade">
+              <div v-if="tool2s.isOpen">
+                <div @click="openEditor(subTool)">
+                  <div class="grid grid-cols-3 gap-3">
+
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="basil:image-outline" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Image</span>
+                    </button>
+
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="material-symbols-light:full-coverage-outline" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Cover</span>
+                    </button>
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="mage:file-2" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">File</span>
+                    </button>
+                  </div>
+                  </div>
+              </div>
+            </transition>
+          </div>
         </div>
       </transition>
     </div>
@@ -138,7 +184,27 @@
           <Icon icon="basil:cross-outline" style="font-size: 20px;" />
         </button>
       </div>
+
+
+
+        <!-- Image Component -->
+    <div v-for="(image, index) in images" :key="index" class="flex items-center gap-4 mb-4">
+        <img
+          :src="image"
+          alt="User Selected"
+          class="max-w-[200px] max-h-[200px] object-cover"
+          contenteditable="true"
+        />
+        <button
+          @click="deleteImage(index)"
+        >
+          X
+        </button>
+      </div>
     </div>
+
+  
+    
 
 
 
@@ -167,6 +233,14 @@
 
     <!-- Color Popup -->
     <TextStylePopup :show="isPopupVisible" @create-styled-text="addStyledText" @close="closePopup" />
+
+    <!-- Image Popup -->
+    <ImagePopup
+      :show="isImagePopupVisible"
+      @create-image="addImage"
+      @close="closeImagePopup"
+    />
+  
   </div>
 </template>
 
@@ -183,6 +257,7 @@ import ListConfigPopup from './ListConfigPopup.vue';
 import UnderlineConfigPoup from './UnderlineConfigPoup.vue';
 import UnderlineComponent from './UnderlineComponent.vue';
 import TextStylePopup from './TextStylePopup.vue';
+import ImagePopup from './ImagePopup.vue';
 
 
 export default {
@@ -200,6 +275,7 @@ export default {
     UnderlineConfigPoup,
     UnderlineComponent,
     TextStylePopup,
+    ImagePopup,
   },
   data() {
     return {
@@ -217,6 +293,8 @@ export default {
       underlines: [],
       isPopupVisible: false,
       styledTextList: [],
+      isImagePopupVisible: false, 
+      images: [],
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -229,6 +307,13 @@ export default {
           isOpen: true,
         },
       ],
+      tool2s: [
+        {
+          name: "Media",
+          isOpen: true,
+        },
+      ],
+      
     };
   },
   methods: {
@@ -237,6 +322,9 @@ export default {
     },
     toggleTool(tool) {
       tool.isOpen = !tool.isOpen;
+    },
+    toggleTools(tools) {
+      tools.isOpen = !tools.isOpen;
     },
 
     // Paragraph
@@ -339,6 +427,21 @@ export default {
     },
     deleteText(index) {
       this.styledTextList.splice(index, 1);
+    },
+
+    // Image
+    openImagePopup() {
+      this.isImagePopupVisible = true;
+    },
+    closeImagePopup() {
+      this.isImagePopupVisible = false;
+    },
+    addImage(imageUrl) {
+      this.images.push(imageUrl); // Add image URL to the list
+      this.closeImagePopup();
+    },
+    deleteImage(index) {
+      this.images.splice(index, 1); // Remove the image from the list
     },
   },
 };

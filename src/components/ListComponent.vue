@@ -11,10 +11,10 @@
             v-model="listItems[index]"
             placeholder="Enter item content"
           />
-          <button @click="deleteItem(index)"><Icon icon="basil:cross-outline" style="font-size: 20px;" /></button>
+          <button @click="deleteItem(index)">x</button>
         </li>
       </component>
-      <button @click="addItem">Add Item</button>
+      <!-- <button @click="addItem" class="bg-gray-300 text-xs p-2 rounded">Add Item</button> -->
     </div>
   </template>
   

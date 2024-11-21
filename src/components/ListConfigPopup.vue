@@ -1,10 +1,10 @@
 <template>
     <div v-if="show" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
     <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
-      <h3>Create a List</h3>
+      <h3 class="text-xl text-center font-bold mb-4">Create a List</h3>
       <label>
         <span class="font-semibold mt-3">List Type:</span>
-        <select v-model="listType" class="w-full">
+        <select v-model="listType" class="w-full mt-2 border rounded p-2">
           <option value="ul">Unordered List</option>
           <option value="ol">Ordered List</option>
         </select>
@@ -12,7 +12,7 @@
   
       <label>
         <span class="font-semibold mt-3">Items (comma-separated):</span>
-        <input v-model="items" placeholder="Enter items" class="w-full" />
+        <input v-model="items" placeholder="Enter items" class="w-full mt-2 border rounded p-2" />
       </label>
   
       <div class="flex justify-between mt-3">
@@ -31,8 +31,8 @@
     },
     data() {
       return {
-        listType: "ul", // Default to unordered list
-        items: "", // Input for list items
+        listType: "ul", 
+        items: "", 
       };
     },
     methods: {
