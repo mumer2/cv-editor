@@ -74,6 +74,14 @@
                       <span class="text-sm">Underline</span>
                     </button>
 
+                    <button  @click="showPositionPopup = true"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:text-position-behind-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Position</span>
+                    </button>
+
                     <button @click="openPopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -181,6 +189,25 @@
           @update-content="updateUnderline(index, $event)" @delete="deleteUnderline(index)" />
       </div>
 
+      <!-- Position Component -->
+      <div
+        v-for="(textBlock, index) in textBlocks"
+        :key="index"
+        class="relative group"
+      >
+        <input
+          v-model="textBlocks[index].content"
+          class="w-full border-none focus:outline-none focus:ring"
+          :class="textBlocks[index].alignment"
+        />
+        <button
+          @click="deletePositionText(index)"
+          class="absolute right-0 top-0 px-2 py-1 text-black text-sm"
+        >
+          x
+        </button>
+      </div>
+
       <!-- Color Style Component -->
       <div v-for="(item, index) in styledTextList" :key="index" class="flex items-center gap-2">
         <span
@@ -245,6 +272,13 @@
     <UnderlineConfigPoup v-if="showUnderlineConfigPopup" @create-underline="addUnderline"
       @close="showUnderlineConfigPopup = false" />
 
+    <!-- Position Popup -->
+    <PositionPopup
+      :show="showPositionPopup"
+      @close="showPositionPopup = false"
+      @add-text="addPositionText"
+    />
+
     <!-- Color Popup -->
     <TextStylePopup :show="isPopupVisible" @create-styled-text="addStyledText" @close="closePopup" />
 
@@ -272,7 +306,7 @@ import UnderlineComponent from './UnderlineComponent.vue';
 import TextStylePopup from './TextStylePopup.vue';
 import ImagePopup from './ImagePopup.vue';
 import LinkPopup from './LinkPopup.vue';
-
+import PositionPopup from './PositionPopup.vue';
 
 export default {
   name: "Home",
@@ -291,6 +325,7 @@ export default {
     TextStylePopup,
     ImagePopup,
     LinkPopup,
+    PositionPopup,
   },
   data() {
     return {
@@ -300,10 +335,12 @@ export default {
       showParagraphConfigPopup: false,
       showListConfigPopup: false,
       showUnderlineConfigPopup: false,
+      showLinkPopup: false,
       isPopupVisible: false,
       isImagePopupVisible: false,
       editorToolActive: false,
       showTable: false,
+      showPositionPopup: false, 
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -315,10 +352,9 @@ export default {
       underlines: [],
       styledTextList: [],
       images: [],
-      showLinkPopup: false,
       links: [],
+      textBlocks: [],
       currentLink: null,
-
       columns: 0,
       tools: [
         {
@@ -428,6 +464,14 @@ export default {
     },
     deleteUnderline(index) {
       this.underlines.splice(index, 1);
+    },
+
+    // Position
+    addPositionText(newText) {
+      this.textBlocks.push(newText); 
+    },
+    deletePositionText(index) {
+      this.textBlocks.splice(index, 1);
     },
 
     // Color
