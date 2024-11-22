@@ -1,14 +1,14 @@
 <template>
-    <nav class="bg-gray-200 text-black fixed top-0 left-0 w-full z-50 shadow-md">
+    <div class="bg-gray-200 text-black fixed top-0 left-0 w-full z-50 shadow-md">
         <div class="container mx-auto px-10 flex justify-between items-center h-14">
             <div class="text-xl font-bold">
                 <router-link to="/" class="hover:text-gray-400">Editor</router-link>
             </div>
 
             <nav class="hidden md:flex space-x-6 text-sm">
-                <RouterLink to="/" class="hover:text-gray-500">Home</RouterLink>
-                <RouterLink to="/about" class="hover:text-gray-500">About</RouterLink>
-                <RouterLink to="/templates" class="hover:text-gray-500">Templates</RouterLink>
+                <RouterLink to="/" class="hover:text-blue-500">Home</RouterLink>
+                <RouterLink to="/about" class="hover:text-blue-500">About</RouterLink>
+                <RouterLink to="/templates" class="hover:text-blue-500">Templates</RouterLink>
             </nav>
 
             <button @click="toggleMenu" class="block md:hidden text-gray-800 focus:outline-none">
@@ -20,12 +20,12 @@
         </div>
         <div v-if="isOpen" class="md:visible text-center text-black bg-gray-100 z-50">
             <nav class="space-y-2 py-2 px-4">
-                <RouterLink to="/" class="block hover:text-gray-500">Home</RouterLink>
-                <RouterLink to="/about" class="block hover:text-gray-500">About</RouterLink>
-                <RouterLink to="/templates" class="block hover:text-gray-500">Templates</RouterLink>
+                <RouterLink to="/" class="block hover:text-blue-500">Home</RouterLink>
+                <RouterLink to="/about" class="block hover:text-blue-500">About</RouterLink>
+                <RouterLink to="/templates" class="block hover:text-blue-500">Templates</RouterLink>
             </nav>
         </div>
-    </nav>
+    </div>
 </template>
 
 <script>

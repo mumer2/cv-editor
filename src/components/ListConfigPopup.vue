@@ -13,7 +13,7 @@
         <span class="font-semibold mt-3">Items (comma-separated):</span>
         <input v-model="items" placeholder="Enter items" class="w-full mt-2 border rounded p-2" />
       </label>
-  
+
       <div class="flex justify-between mt-3">
         <button @click="$emit('close')" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
         <button @click="createList" class="px-4 py-2 bg-blue-500 text-white rounded">Create</button>
