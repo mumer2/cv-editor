@@ -5,8 +5,7 @@
       <label>
         <span class="font-semibold mt-3">List Type:</span>
         <select v-model="listType" class="w-full mt-2 border rounded p-2">
-          <option value="ul">Unordered List</option>
-          <option value="ol">Ordered List</option>
+          <option value="ul">Default</option>
         </select>
       </label>
   
@@ -37,10 +36,10 @@
     },
     methods: {
       createList() {
-        if (!this.items.trim()) return; // Ensure items are not empty
+        if (!this.items.trim()) return; 
         const itemArray = this.items.split(",").map((item) => item.trim());
         const newList = { type: this.listType, items: itemArray };
-        this.$emit("create-list", newList); // Emit the new list data
+        this.$emit("create-list", newList);
       },
     },
   };

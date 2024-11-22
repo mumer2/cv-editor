@@ -1,4 +1,3 @@
-<!-- HeadingComponent.vue -->
 <template>
     <div class="heading-container border-b py-2">
         <div class="action-buttons text-xl mt-2 flex space-x-2">
@@ -55,6 +54,7 @@ import { Icon } from '@iconify/vue';
   .editable-heading {
     outline: none;
     cursor: text;
+    direction: ltr;
   }
   </style>
   

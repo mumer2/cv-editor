@@ -1,4 +1,3 @@
-<!-- HeadingConfigPopup.vue -->
 <template>
     <div v-if="show" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
@@ -10,7 +9,7 @@
             v-model="selectedLevel"
             class="mt-1 block w-full border border-gray-300 p-2 rounded-md"
           >
-            <option v-for="level in levels" :key="level" :value="level">H{{ level }}</option>
+            <option v-for="level in levels" :key="level" :value="level">Default</option>
           </select>
         </div>
         <div class="mb-4">
@@ -41,7 +40,7 @@
     },
     data() {
       return {
-        levels: [1, 2, 3, 4, 5, 6],
+        levels: [1],
         selectedLevel: 1,
         selectedStyle: "",
       };

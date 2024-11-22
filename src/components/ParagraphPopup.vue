@@ -1,4 +1,3 @@
-<!-- HeadingComponent.vue -->
 <template>
     <div class="heading-container border-b py-2">
         <div class="action-buttons mt-2 flex space-x-2">
@@ -28,7 +27,7 @@ import { Icon } from '@iconify/vue';
     props: {
       ParagraphContent: {
         type: String,
-        default: "Sample Heading",
+        default: "Sample Paragraph",
       },
       ParagraphStyle: {
         type: String,

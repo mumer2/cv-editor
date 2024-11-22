@@ -21,9 +21,9 @@
             class="mt-1 block w-full border border-gray-300 p-2 rounded-md"
           >
             <option value="">Default</option>
-            <option value="font-bold">Bold</option>
+            <!-- <option value="font-bold">Bold</option>
             <option value="italic">Italic</option>
-            <option value="underline">Underline</option>
+            <option value="underline">Underline</option> -->
           </select>
         </div>
         <div class="flex justify-between">

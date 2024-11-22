@@ -16,40 +16,26 @@
         placeholder="Enter item content"
         class="border rounded p-1"
       />
-      <button @click="deleteItem(index)" class="ml-2 text-red-500">x</button>
+      <button @click="deleteItem(index)" class="ml-2">x</button>
     </li>
   </component>
-      <!-- <component :is="listType">
-        <li v-for="(item, index) in listItems" :key="index">
-          <input 
-            v-model="listItems[index]"
-            placeholder="Enter item content"
-          />
-          <button @click="deleteItem(index)">x</button>
-        </li>
-      </component> -->
-      <!-- <button @click="addItem" class="bg-gray-300 text-xs p-2 rounded">Add Item</button> -->
     </div>
   </template>
   
   <script>
   export default {
-    // props: {
-    //   listType: String,
-    //   listItems: Array,
-    // },
     props: {
     listType: {
       type: String,
-      default: "ul", // Default list type (unordered list)
+      default: "ul",
     },
     listStyle: {
       type: String,
-      default: "disc", // Default list style (dotted)
+      default: "disc",
     },
     listItems: {
       type: Array,
-      default: () => ["Example Item 1", "Example Item 2"], // Example list items
+      default: () => ["Example Item 1", "Example Item 2"],
     },
   },
     methods: {
@@ -57,12 +43,8 @@
         this.listItems.push("New Item");
         this.$emit("update-content", { listType: this.listType, listItems: this.listItems });
       },
-      // deleteItem(index) {
-      //   this.listItems.splice(index, 1);
-      //   this.$emit("update-content", { listType: this.listType, listItems: this.listItems });
-      // },
       deleteItem(index) {
-      this.listItems.splice(index, 1); // Remove the list item
+      this.listItems.splice(index, 1);
     },
     },
   };
