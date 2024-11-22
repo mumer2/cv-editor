@@ -1,7 +1,7 @@
 <!-- HeadingComponent.vue -->
 <template>
     <div class="heading-container border-b py-2">
-        <div class="action-buttons mt-2 flex space-x-2">
+        <div class="action-buttons text-xl mt-2 flex space-x-2">
           <component
         :is="`h${headingLevel}`"
         class="editable-heading"

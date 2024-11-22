@@ -1,0 +1,50 @@
+<template>
+    <div v-if="show" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
+            <h3 class="text-xl text-center font-bold mb-4">Add/Edit Link</h3>
+            <label class="block mb-2">
+                <span class="font-semibold">Link Text:</span>
+                <input v-model="linkText" placeholder="Enter link text" class="w-full mt-1 border rounded p-2" />
+            </label>
+            <label class="block mb-4">
+                <span class="font-semibold">Link URL:</span>
+                <input v-model="linkUrl" placeholder="Enter link URL" class="w-full mt-1 border rounded p-2" />
+            </label>
+            <div class="flex justify-between">
+                <button @click="$emit('close')" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
+                <button @click="addLink" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        show: {
+            type: Boolean,
+            required: true,
+        },
+        link: {
+            type: Object,
+            default: () => ({ text: "", url: "" }),
+        },
+    },
+    data() {
+        return {
+            linkText: this.link.text || "", 
+            linkUrl: this.link.url || "", 
+        };
+    },
+    methods: {
+        addLink() {
+            if (!this.linkText.trim() || !this.linkUrl.trim()) {
+                alert("Please fill in both fields.");
+                return;
+            }
+            this.$emit("save-link", { text: this.linkText, url: this.linkUrl });
+            this.$emit("close");
+        },
+    },
+};
+</script>

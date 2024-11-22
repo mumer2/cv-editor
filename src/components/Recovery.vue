@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-screen">
-    
+
     <div>
       <button @click="toggleSidebar" class="absolute top-[63px] left-2 z-30 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
@@ -23,6 +23,7 @@
               class="peer relative h-10 w-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
+          <!-- Text -->
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
             <button @click="toggleTool(tool)"
               class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
@@ -76,11 +77,65 @@
                     <button @click="openPopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
-                        <Icon icon="unjs:theme-colors" style="color: black;font-size: 26px;" />
+                        <Icon icon="ic:twotone-color-lens" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">Color style</span>
                     </button>
 
+                    <button @click="openLinkPopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="bitcoin-icons:link-filled" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Link</span>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </div>
+
+          <!-- Media -->
+          <div v-for="(tool2, index) in tool2s" :key="index" class="space-y-2">
+            <button @click="toggleTools(tool2s)"
+              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
+              <span class="text-gray-600 text-sm">{{ tool2.name }}</span>
+              <i :class="tool2s.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
+            </button>
+
+            <transition name="fade">
+              <div v-if="tool2s.isOpen">
+                <div @click="openEditor(subTool)">
+                  <div class="grid grid-cols-3 gap-3">
+
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="basil:image-outline" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Image</span>
+                    </button>
+
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="material-symbols-light:full-coverage-outline"
+                          style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Cover</span>
+                    </button>
+
+                    <button @click="openImagePopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="mage:file-2" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">File</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -138,7 +193,32 @@
           <Icon icon="basil:cross-outline" style="font-size: 20px;" />
         </button>
       </div>
+
+
+      <!-- Link -->
+      <ul>
+        <li v-for="(link, index) in links" :key="index" class="mb-2">
+          <a :href="link.url" target="_blank" class="text-blue-500 underline">
+            {{ link.text }}
+          </a>
+          <button @click="deleteLink(index)" class="ml-2 px-2 py-1 text-black">
+            x
+          </button>
+        </li>
+      </ul>
+
+
+      <!-- Image Component -->
+      <div v-for="(image, index) in images" :key="index" class="flex items-center gap-4 mb-4">
+        <img :src="image" alt="User Selected" class="max-w-[200px] max-h-[200px] object-cover" contenteditable="true" />
+        <button @click="deleteImage(index)">
+          X
+        </button>
+      </div>
     </div>
+
+
+
 
 
 
@@ -167,6 +247,13 @@
 
     <!-- Color Popup -->
     <TextStylePopup :show="isPopupVisible" @create-styled-text="addStyledText" @close="closePopup" />
+
+    <!-- Link Popup -->
+    <LinkPopup v-if="showLinkPopup" :show="showLinkPopup" :link="currentLink" @close="closeLinkPopup"
+      @save-link="saveLink" />
+    <!-- Image Popup -->
+    <ImagePopup :show="isImagePopupVisible" @create-image="addImage" @close="closeImagePopup" />
+
   </div>
 </template>
 
@@ -183,6 +270,8 @@ import ListConfigPopup from './ListConfigPopup.vue';
 import UnderlineConfigPoup from './UnderlineConfigPoup.vue';
 import UnderlineComponent from './UnderlineComponent.vue';
 import TextStylePopup from './TextStylePopup.vue';
+import ImagePopup from './ImagePopup.vue';
+import LinkPopup from './LinkPopup.vue';
 
 
 export default {
@@ -200,35 +289,50 @@ export default {
     UnderlineConfigPoup,
     UnderlineComponent,
     TextStylePopup,
+    ImagePopup,
+    LinkPopup,
   },
   data() {
     return {
       isSidebarOpen: true,
       showTableConfigPopup: false,
-      activeTools: [],
       showHeadingConfigPopup: false,
-      headings: [],
       showParagraphConfigPopup: false,
-      paragraph: [],
-      tableData: [],
       showListConfigPopup: false,
-      lists: [],
       showUnderlineConfigPopup: false,
-      underlines: [],
       isPopupVisible: false,
-      styledTextList: [],
+      isImagePopupVisible: false,
+      editorToolActive: false,
+      showTable: false,
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
+      activeTools: [],
+      headings: [],
+      paragraph: [],
+      tableData: [],
+      lists: [],
+      underlines: [],
+      styledTextList: [],
+      images: [],
+      showLinkPopup: false,
+      links: [],
+      currentLink: null,
+
       columns: 0,
-      showTable: false,
-      editorToolActive: false,
       tools: [
         {
           name: "Text",
           isOpen: true,
         },
       ],
+      tool2s: [
+        {
+          name: "Media",
+          isOpen: true,
+        },
+      ],
+
     };
   },
   methods: {
@@ -237,6 +341,9 @@ export default {
     },
     toggleTool(tool) {
       tool.isOpen = !tool.isOpen;
+    },
+    toggleTools(tools) {
+      tools.isOpen = !tools.isOpen;
     },
 
     // Paragraph
@@ -295,17 +402,17 @@ export default {
 
     // List
     openListConfigPopup() {
-      this.showListConfigPopup = true; 
+      this.showListConfigPopup = true;
     },
     addList(newList) {
       this.lists.push(newList);
-      this.showListConfigPopup = false; 
+      this.showListConfigPopup = false;
     },
     updateListContent(index, updatedData) {
-      this.lists[index] = { ...this.lists[index], ...updatedData }; 
+      this.lists[index] = { ...this.lists[index], ...updatedData };
     },
     deleteList(index) {
-      this.lists.splice(index, 1); 
+      this.lists.splice(index, 1);
     },
 
     // Underline
@@ -313,7 +420,7 @@ export default {
       this.showUnderlineConfigPopup = true;
     },
     addUnderline(newUnderline) {
-      this.underlines.push(newUnderline); 
+      this.underlines.push(newUnderline);
       this.showUnderlineConfigPopup = false;
     },
     updateUnderline(index, updatedData) {
@@ -331,7 +438,7 @@ export default {
       this.isPopupVisible = false;
     },
     addStyledText(styledText) {
-      this.styledTextList.push(styledText); 
+      this.styledTextList.push(styledText);
       this.closePopup();
     },
     updateText(index, event) {
@@ -339,6 +446,41 @@ export default {
     },
     deleteText(index) {
       this.styledTextList.splice(index, 1);
+    },
+
+    // Image
+    openImagePopup() {
+      this.isImagePopupVisible = true;
+    },
+    closeImagePopup() {
+      this.isImagePopupVisible = false;
+    },
+    addImage(imageUrl) {
+      this.images.push(imageUrl);
+      this.closeImagePopup();
+    },
+    deleteImage(index) {
+      this.images.splice(index, 1);
+    },
+
+    // Link
+    openLinkPopup(link = null, index = null) {
+      this.currentLink = link || { text: "", url: "" };
+      this.editIndex = index;
+      this.showLinkPopup = true;
+    },
+    closeLinkPopup() {
+      this.showLinkPopup = false;
+      this.currentLink = null;
+      this.editIndex = null;
+    },
+    saveLink(linkData) {
+
+      this.links.push(linkData);
+
+    },
+    deleteLink(index) {
+      this.links.splice(index, 1);
     },
   },
 };
