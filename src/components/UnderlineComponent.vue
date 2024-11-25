@@ -29,7 +29,7 @@
       },
       styleType: {
         type: String,
-        default: "solid", // Default to "solid" underline
+        default: "solid",
       },
     },
     methods: {

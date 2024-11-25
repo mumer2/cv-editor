@@ -1,4 +1,3 @@
-<!-- HeadingConfigPopup.vue -->
 <template>
     <div v-if="show" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
