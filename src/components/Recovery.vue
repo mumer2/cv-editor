@@ -15,7 +15,7 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 z-20 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
@@ -25,10 +25,9 @@
 
           <!-- Text -->
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
-            <button @click="toggleTool(tool)"
-              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
-              <span class="text-gray-700 text-sm">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            <button @click="toggleTool(tool)" class="flex justify-between w-full py-2 px-4 text-black rounded">
+              <span class="text-gray-600 text-sm">{{ tool.name }}</span>
+              <i :class="tool.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
                 style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>
 
@@ -43,6 +42,7 @@
                       </span>
                       <span class="text-sm">Paragraph</span>
                     </button>
+
                     <button @click="openHeadingConfigPopup"
                       class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -50,6 +50,7 @@
                       </span>
                       <span class="text-sm">Heading</span>
                     </button>
+
                     <button @click="openTableConfigPopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -74,7 +75,7 @@
                       <span class="text-sm">Underline</span>
                     </button>
 
-                    <button  @click="showPositionPopup = true"
+                    <button @click="showPositionPopup = true"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
                         <Icon icon="fluent:text-position-behind-20-regular" style="color: black;font-size: 26px;" />
@@ -98,6 +99,22 @@
                       <span class="text-sm">Link</span>
                     </button>
 
+                    <button @click="addPageBreak"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:document-page-break-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Line Break</span>
+                    </button>
+
+                    <button @click="showColorPopup = true"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="ant-design:bg-colors-outlined" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">BG Change</span>
+                    </button>
+
                   </div>
                 </div>
               </div>
@@ -106,10 +123,9 @@
 
           <!-- Media -->
           <div v-for="(tool2, index) in tool2s" :key="index" class="space-y-2">
-            <button @click="toggleTools(tool2s)"
-              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
+            <button @click="toggleTools(tool2s)" class="flex justify-between w-full py-2 px-4 text-black rounded ">
               <span class="text-gray-600 text-sm">{{ tool2.name }}</span>
-              <i :class="tool2s.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              <i :class="tool2s.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
                 style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>
 
@@ -118,7 +134,6 @@
                 <div @click="openEditor(subTool)">
                   <div class="grid grid-cols-3 gap-3">
 
-
                     <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -126,7 +141,6 @@
                       </span>
                       <span class="text-sm">Image</span>
                     </button>
-
 
                     <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
@@ -137,13 +151,13 @@
                       <span class="text-sm">Cover</span>
                     </button>
 
-                    <button @click="openImagePopup"
+                    <!-- <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
                         <Icon icon="mage:file-2" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">File</span>
-                    </button>
+                    </button> -->
                   </div>
                 </div>
               </div>
@@ -159,7 +173,6 @@
       'ml-0': isSidebarOpen,
     }" class="preview-section border border-gray-300 p-4">
       <h2 class="text-sm font-bold text-center text-black">Preview</h2>
-
 
       <!-- Paragraph Component -->
       <div v-for="(paragraph, index) in paragraph" :key="index">
@@ -190,20 +203,10 @@
       </div>
 
       <!-- Position Component -->
-      <div
-        v-for="(textBlock, index) in textBlocks"
-        :key="index"
-        class="relative group"
-      >
-        <input
-          v-model="textBlocks[index].content"
-          class="w-full border-none focus:outline-none focus:ring"
-          :class="textBlocks[index].alignment"
-        />
-        <button
-          @click="deletePositionText(index)"
-          class="absolute right-0 top-0 px-2 py-1 text-black text-sm"
-        >
+      <div v-for="(textBlock, index) in textBlocks" :key="index" class="relative group">
+        <input v-model="textBlocks[index].content" class="w-full border-none focus:outline-none focus:ring"
+          :class="textBlocks[index].alignment" />
+        <button @click="deletePositionText(index)" class="absolute right-0 top-0 px-2 py-1 text-black text-sm">
           x
         </button>
       </div>
@@ -221,7 +224,6 @@
         </button>
       </div>
 
-
       <!-- Link -->
       <ul>
         <li v-for="(link, index) in links" :key="index" class="mb-2">
@@ -234,6 +236,23 @@
         </li>
       </ul>
 
+      <!-- Page Break -->
+      <div v-for="(block, index) in contentBlocks" :key="index" class="relative group">
+        <!-- Render Content Blocks -->
+        <div v-if="block.type === 'text'" class="mb-4">
+          <input v-model="block.content" placeholder="Enter text"
+            class="w-full border p-2 rounded focus:outline-none focus:ring" />
+        </div>
+
+        <!-- Render Page Break -->
+        <div v-else-if="block.type === 'page-break'" class="mb-4 border-t border-dashed border-gray-500 relative">
+          <p class="absolute top-[-10px] left-0 text-gray-500 text-sm bg-white px-2">
+          </p>
+          <button @click="deleteBlock(index)" class="absolute right-2 top-[-10px] px-2 py-1 text-sm rounded">
+            x
+          </button>
+        </div>
+      </div>
 
       <!-- Image Component -->
       <div v-for="(image, index) in images" :key="index" class="flex items-center gap-4 mb-4">
@@ -243,11 +262,6 @@
         </button>
       </div>
     </div>
-
-
-
-
-
 
     <!-- Editor Section -->
     <div v-if="editorToolActive" class="editor-section border-2 border-gray-200 p-4 w-[300px]">
@@ -273,11 +287,7 @@
       @close="showUnderlineConfigPopup = false" />
 
     <!-- Position Popup -->
-    <PositionPopup
-      :show="showPositionPopup"
-      @close="showPositionPopup = false"
-      @add-text="addPositionText"
-    />
+    <PositionPopup :show="showPositionPopup" @close="showPositionPopup = false" @add-text="addPositionText" />
 
     <!-- Color Popup -->
     <TextStylePopup :show="isPopupVisible" @create-styled-text="addStyledText" @close="closePopup" />
@@ -288,6 +298,8 @@
     <!-- Image Popup -->
     <ImagePopup :show="isImagePopupVisible" @create-image="addImage" @close="closeImagePopup" />
 
+    <!-- BG Color -->
+    <ColorPickerPopup :show="showColorPopup" @close="showColorPopup = false" @apply-colors="changeColors" />
   </div>
 </template>
 
@@ -307,6 +319,7 @@ import TextStylePopup from './TextStylePopup.vue';
 import ImagePopup from './ImagePopup.vue';
 import LinkPopup from './LinkPopup.vue';
 import PositionPopup from './PositionPopup.vue';
+import ColorPickerPopup from './ColorPickerPopup.vue';
 
 export default {
   name: "Home",
@@ -326,6 +339,7 @@ export default {
     ImagePopup,
     LinkPopup,
     PositionPopup,
+    ColorPickerPopup,
   },
   data() {
     return {
@@ -340,7 +354,8 @@ export default {
       isImagePopupVisible: false,
       editorToolActive: false,
       showTable: false,
-      showPositionPopup: false, 
+      showPositionPopup: false,
+      showColorPopup: false,
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -354,18 +369,19 @@ export default {
       images: [],
       links: [],
       textBlocks: [],
+      contentBlocks: [],
       currentLink: null,
       columns: 0,
       tools: [
         {
           name: "Text",
-          isOpen: true,
+          isOpen: false,
         },
       ],
       tool2s: [
         {
           name: "Media",
-          isOpen: true,
+          isOpen: false,
         },
       ],
 
@@ -468,7 +484,7 @@ export default {
 
     // Position
     addPositionText(newText) {
-      this.textBlocks.push(newText); 
+      this.textBlocks.push(newText);
     },
     deletePositionText(index) {
       this.textBlocks.splice(index, 1);
@@ -490,6 +506,21 @@ export default {
     },
     deleteText(index) {
       this.styledTextList.splice(index, 1);
+    },
+
+    // Page Break
+    addPageBreak() {
+      this.contentBlocks.push({ type: "page-break" });
+    },
+    deleteBlock(index) {
+      this.contentBlocks.splice(index, 1);
+    },
+
+    // BG Color
+    changeColors({ bgColor, textColor }) {
+      document.body.style.backgroundColor = bgColor;
+      document.body.style.color = textColor;
+      this.showColorPopup = false;
     },
 
     // Image

@@ -107,7 +107,7 @@
                       <span class="text-sm">Line Break</span>
                     </button>
 
-                    <button  @click="showColorPopup = true"
+                    <button @click="showColorPopup = true"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
                         <Icon icon="ant-design:bg-colors-outlined" style="color: black;font-size: 26px;" />
@@ -151,13 +151,13 @@
                       <span class="text-sm">Cover</span>
                     </button>
 
-                    <button @click="openImagePopup"
+                    <!-- <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
                         <Icon icon="mage:file-2" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">File</span>
-                    </button>
+                    </button> -->
                   </div>
                 </div>
               </div>
@@ -247,7 +247,6 @@
         <!-- Render Page Break -->
         <div v-else-if="block.type === 'page-break'" class="mb-4 border-t border-dashed border-gray-500 relative">
           <p class="absolute top-[-10px] left-0 text-gray-500 text-sm bg-white px-2">
-
           </p>
           <button @click="deleteBlock(index)" class="absolute right-2 top-[-10px] px-2 py-1 text-sm rounded">
             x
@@ -300,11 +299,7 @@
     <ImagePopup :show="isImagePopupVisible" @create-image="addImage" @close="closeImagePopup" />
 
     <!-- BG Color -->
-    <ColorPickerPopup
-      :show="showColorPopup"
-      @close="showColorPopup = false"
-      @apply-colors="changeColors"
-    />
+    <ColorPickerPopup :show="showColorPopup" @close="showColorPopup = false" @apply-colors="changeColors" />
   </div>
 </template>
 
