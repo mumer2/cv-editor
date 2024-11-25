@@ -27,7 +27,7 @@
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
             <button @click="toggleTool(tool)"
               class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
-              <span class="text-gray-600 text-sm">{{ tool.name }}</span>
+              <span class="text-gray-700 text-sm">{{ tool.name }}</span>
               <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                 style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>

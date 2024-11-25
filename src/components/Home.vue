@@ -107,6 +107,14 @@
                       <span class="text-sm">Line Break</span>
                     </button>
 
+                    <button  @click="showColorPopup = true"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="ant-design:bg-colors-outlined" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">BG Change</span>
+                    </button>
+
                   </div>
                 </div>
               </div>
@@ -291,6 +299,12 @@
     <!-- Image Popup -->
     <ImagePopup :show="isImagePopupVisible" @create-image="addImage" @close="closeImagePopup" />
 
+    <!-- BG Color -->
+    <ColorPickerPopup
+      :show="showColorPopup"
+      @close="showColorPopup = false"
+      @apply-colors="changeColors"
+    />
   </div>
 </template>
 
@@ -310,6 +324,7 @@ import TextStylePopup from './TextStylePopup.vue';
 import ImagePopup from './ImagePopup.vue';
 import LinkPopup from './LinkPopup.vue';
 import PositionPopup from './PositionPopup.vue';
+import ColorPickerPopup from './ColorPickerPopup.vue';
 
 export default {
   name: "Home",
@@ -329,6 +344,7 @@ export default {
     ImagePopup,
     LinkPopup,
     PositionPopup,
+    ColorPickerPopup,
   },
   data() {
     return {
@@ -344,6 +360,7 @@ export default {
       editorToolActive: false,
       showTable: false,
       showPositionPopup: false,
+      showColorPopup: false,
       activeEditorTool: null,
       selectedTool: null,
       newListItem: "",
@@ -502,6 +519,13 @@ export default {
     },
     deleteBlock(index) {
       this.contentBlocks.splice(index, 1);
+    },
+
+    // BG Color
+    changeColors({ bgColor, textColor }) {
+      document.body.style.backgroundColor = bgColor;
+      document.body.style.color = textColor;
+      this.showColorPopup = false;
     },
 
     // Image
