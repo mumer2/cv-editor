@@ -15,7 +15,7 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 shadow-lg z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 z-20 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
@@ -26,9 +26,9 @@
           <!-- Text -->
           <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
             <button @click="toggleTool(tool)"
-              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
+              class="flex justify-between w-full py-2 px-4 text-black rounded">
               <span class="text-gray-600 text-sm">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              <i :class="tool.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
                 style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>
 
@@ -98,6 +98,15 @@
                       <span class="text-sm">Link</span>
                     </button>
 
+
+                    <button @click="addPageBreak"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:document-page-break-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Line Break</span>
+                    </button>
+
                   </div>
                 </div>
               </div>
@@ -107,9 +116,9 @@
           <!-- Media -->
           <div v-for="(tool2, index) in tool2s" :key="index" class="space-y-2">
             <button @click="toggleTools(tool2s)"
-              class="flex justify-between w-full py-2 px-4 text-black rounded hover:bg-slate-200 ">
+              class="flex justify-between w-full py-2 px-4 text-black rounded ">
               <span class="text-gray-600 text-sm">{{ tool2.name }}</span>
-              <i :class="tool2s.isOpen ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              <i :class="tool2s.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
                 style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
             </button>
 
@@ -234,6 +243,34 @@
         </li>
       </ul>
 
+      <!-- Page Break -->
+
+      <div v-for="(block, index) in contentBlocks" :key="index" class="relative group">
+        <!-- Render Content Blocks -->
+        <div v-if="block.type === 'text'" class="mb-4">
+          <input
+            v-model="block.content"
+            placeholder="Enter text"
+            class="w-full border p-2 rounded focus:outline-none focus:ring"
+          />
+        </div>
+
+        <!-- Render Page Break -->
+        <div
+          v-else-if="block.type === 'page-break'"
+          class="mb-4 border-t border-dashed border-gray-500 relative"
+        >
+          <p class="absolute top-[-10px] left-0 text-gray-500 text-sm bg-white px-2">
+          
+          </p>
+          <button
+            @click="deleteBlock(index)"
+            class="absolute right-2 top-[-10px] px-2 py-1 text-sm rounded"
+          >
+            x
+          </button>
+        </div>
+      </div>
 
       <!-- Image Component -->
       <div v-for="(image, index) in images" :key="index" class="flex items-center gap-4 mb-4">
@@ -354,12 +391,13 @@ export default {
       images: [],
       links: [],
       textBlocks: [],
+      contentBlocks: [],
       currentLink: null,
       columns: 0,
       tools: [
         {
           name: "Text",
-          isOpen: true,
+          isOpen: false,
         },
       ],
       tool2s: [
@@ -490,6 +528,15 @@ export default {
     },
     deleteText(index) {
       this.styledTextList.splice(index, 1);
+    },
+
+    // Page Break
+    addPageBreak() {
+      this.contentBlocks.push({ type: "page-break" });
+    },
+    // Delete a block (text or page break) by its index
+    deleteBlock(index) {
+      this.contentBlocks.splice(index, 1); // Remove the block from the array
     },
 
     // Image

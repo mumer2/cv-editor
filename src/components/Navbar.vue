@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-200 text-black fixed top-0 left-0 w-full z-50 shadow-md">
+    <div class="bg-gray-100 text-black border-b fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-10 flex justify-between items-center h-14">
             <div class="text-xl font-bold">
                 <router-link to="/" class="hover:text-gray-400">Editor</router-link>
