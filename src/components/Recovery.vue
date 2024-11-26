@@ -2,12 +2,12 @@
   <div class="flex h-screen">
 
     <div>
-      <button @click="toggleSidebar" class="absolute top-[63px] left-2 z-30 p-2 rounded-lg focus:outline-none">
+      <button @click="toggleSidebar" class="fixed top-[12px]  left-3 z-50 p-2 rounded-lg focus:outline-none">
         <span v-if="isSidebarOpen">
-          <i class="pi pi-times" style="font-size: 1rem; color:black"></i>
+          <i class="pi pi-bars" style="font-size: 1.3rem; color:black"></i>
         </span>
         <span v-else>
-          <i class="pi pi-bars" style="font-size: 1rem; color:black"></i>
+          <i class="pi pi-bars" style="font-size: 1.3rem; color:black"></i>
         </span>
       </button>
     </div>
@@ -23,18 +23,42 @@
               class="peer relative h-10 w-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
-          <!-- Text -->
-          <div v-for="(tool, index) in tools" :key="index" class="space-y-2">
-            <button @click="toggleTool(tool)" class="flex justify-between w-full py-2 px-4 text-black rounded">
-              <span class="text-gray-600 text-sm">{{ tool.name }}</span>
-              <i :class="tool.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
-                style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
-            </button>
+          <div class="relative w-full h-screen flex bg-gray-100">
+            <!-- Main Tools Menu -->
+            <div v-if="currentMenu === 'main'" class="p-2 bg-white rounded-lg shadow-lg w-80">
+              <ul class="space-y-2">
+                <li v-for="tool in tools" :key="tool.id" @click="openSubMenu('textSubMenu',tool.id)"
+                  class="flex justify-between w-full cursor-pointer p-3 bg-slate-50 text-black rounded">
+                  <span>
+                    {{ tool.name }}
+                  </span>
+                  <i :class="tool.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
+                    style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
+                </li>
 
-            <transition name="fade">
-              <div v-if="tool.isOpen">
-                <div @click="openEditor(subTool)">
+                
+                <li v-for="tool2 in tools2" :key="tool2.id" @click="openSubMenu2('mediaSubMenu',tool2.id)"
+                  class="flex justify-between w-full cursor-pointer p-3 bg-slate-50 text-black rounded">
+                  <span>
+                    {{ tool2.name }}
+                  </span>
+                  <i :class="tool2.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
+                    style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
+                </li>
+
+              </ul>
+            </div>
+
+            <!-- Submenu Popup -->
+            <div v-else-if="currentMenu === 'textSubMenu'" class="p-2 bg-white rounded-lg w-80">
+              <button @click="backToMainMenu" class="mb-4 text-sm text-blue-600 hover:text-blue-700">
+                ← Back
+              </button>
+              <ul>
+                <li>
+
                   <div class="grid grid-cols-3 gap-3">
+
                     <button @click="openParagraphConfigPopup"
                       class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -116,22 +140,19 @@
                     </button>
 
                   </div>
-                </div>
-              </div>
-            </transition>
-          </div>
 
-          <!-- Media -->
-          <div v-for="(tool2, index) in tool2s" :key="index" class="space-y-2">
-            <button @click="toggleTools(tool2s)" class="flex justify-between w-full py-2 px-4 text-black rounded ">
-              <span class="text-gray-600 text-sm">{{ tool2.name }}</span>
-              <i :class="tool2s.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
-                style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
-            </button>
+                </li>
+              </ul>
+            </div>
 
-            <transition name="fade">
-              <div v-if="tool2s.isOpen">
-                <div @click="openEditor(subTool)">
+            <!-- Media -->
+            <div v-else-if="currentMenu === 'mediaSubMenu'" class="p-2 bg-white rounded-lg w-80">
+              <button @click="backToMainMenu" class="mb-4 text-sm text-blue-600 hover:text-blue-700">
+                ← Back
+              </button>
+              <ul>
+                <li>
+
                   <div class="grid grid-cols-3 gap-3">
 
                     <button @click="openImagePopup"
@@ -150,18 +171,13 @@
                       </span>
                       <span class="text-sm">Cover</span>
                     </button>
+                   
 
-                    <!-- <button @click="openImagePopup"
-                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span>
-                        <Icon icon="mage:file-2" style="color: black;font-size: 26px;" />
-                      </span>
-                      <span class="text-sm">File</span>
-                    </button> -->
                   </div>
-                </div>
-              </div>
-            </transition>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </transition>
@@ -372,16 +388,17 @@ export default {
       contentBlocks: [],
       currentLink: null,
       columns: 0,
+      currentMenu: "main",
       tools: [
         {
+          id: "tool1",
           name: "Text",
-          isOpen: false,
         },
       ],
-      tool2s: [
+      tools2: [
         {
+          id: "tool2",
           name: "Media",
-          isOpen: false,
         },
       ],
 
@@ -396,6 +413,22 @@ export default {
     },
     toggleTools(tools) {
       tools.isOpen = !tools.isOpen;
+    },
+
+    openSubMenu(toolId) {
+      this.currentMenu = toolId;
+    },
+    openSubMenu2(tool2Id) {
+      this.currentMenu = tool2Id;
+    },
+    backToMainMenu() {
+      this.currentMenu = "main";
+    },
+    getSubMenu(toolId) {
+      return this.tools.find((tool) => tool.id === toolId);
+    },
+    getSubMenu2(tool2Id) {
+      return this.tools2.find((tool2) => tool2.id === tool2Id);
     },
 
     // Paragraph
