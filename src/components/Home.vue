@@ -15,17 +15,17 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="sidebar inset-y-0  left-0 w-[350px] text-white border border-gray-300 z-20 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="sidebar  inset-y-0  left-0 w-[200px] lg:w-[350px] text-white border border-gray-300 z-20 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
             <input id="id-s01" type="search" name="id-s01" placeholder="Search here" aria-label="Search content"
-              class="peer relative h-10 w-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
+              class="peer relative h-10 w-full border border-slate-200 px-4 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
-          <div class="relative w-full h-screen flex bg-gray-100">
+          <div class="relative w-full h-screen flex">
             <!-- Main Tools Menu -->
-            <div v-if="currentMenu === 'main'" class="p-2 bg-white rounded-lg shadow-lg w-80">
+            <div v-if="currentMenu === 'main'" class="p-2 rounded-lg w-full">
               <ul class="space-y-2">
                 <li v-for="tool in tools" :key="tool.id" @click="openSubMenu('textSubMenu',tool.id)"
                   class="flex justify-between w-full cursor-pointer p-3 bg-slate-50 text-black rounded">
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Submenu Popup -->
-            <div v-else-if="currentMenu === 'textSubMenu'" class="p-2 bg-white rounded-lg w-80">
+            <div v-else-if="currentMenu === 'textSubMenu'" class="p-0 bg-white rounded-lg w-80">
               <button @click="backToMainMenu" class="mb-4 text-sm text-blue-600 hover:text-blue-700">
                 ← Back
               </button>
@@ -187,7 +187,7 @@
       'flex-1': true,
       'ml-0': !isSidebarOpen,
       'ml-0': isSidebarOpen,
-    }" class="preview-section border border-gray-300 p-4">
+    }" class="preview-section p-4">
       <h2 class="text-sm font-bold text-center text-black">Preview</h2>
 
       <!-- Paragraph Component -->
@@ -638,7 +638,7 @@ export default {
   .sidebar {
     margin-top: 56px;
     position: absolute;
-    width: 50%;
+    width: 300px;
     z-index: 20;
   }
 
@@ -651,7 +651,6 @@ export default {
   .sidebar {
     margin-top: 56px;
     position: absolute;
-    width: 75%;
     z-index: 20;
   }
 
@@ -659,6 +658,7 @@ export default {
     margin-left: 0 !important;
   }
 }
+
 
 ::-webkit-scrollbar {
   width: 5px;
