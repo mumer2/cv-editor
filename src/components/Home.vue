@@ -408,13 +408,7 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    toggleTool(tool) {
-      tool.isOpen = !tool.isOpen;
-    },
-    toggleTools(tools) {
-      tools.isOpen = !tools.isOpen;
-    },
-
+    
     openSubMenu(toolId) {
       this.currentMenu = toolId;
     },
