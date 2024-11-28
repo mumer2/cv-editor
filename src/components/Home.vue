@@ -190,20 +190,54 @@
       <h2 class="text-sm font-bold text-center text-black">Preview</h2>
 
       <!-- Paragraph Component -->
-      <div v-for="(paragraph, index) in paragraph" :key="index">
+      <!-- <div v-for="(paragraph, index) in paragraph" :key="index">
         <ParagraphPopup :paragraphContent="paragraph.content" :paragraphStyle="paragraph.style"
           @update-content="updateParagraphContent(index, $event)" @delete="deleteParagraph(index)" />
-      </div>
+      </div> -->
+      <div v-for="(paragraph, index) in paragraphs" :key="index" class="flex gap-6 paragraph-container">
+      <p :class="paragraph.style" class="dynamic-paragraph editable-heading"   contenteditable="true"
+      @input="updateParagraphContent">
+        Dynamic Paragraph {{ index + 1 }}
+      </p>
+      <button @click="deleteParagraph(index)">
+        x
+      </button>
+    </div>
 
       <!-- Table Component -->
       <TablePopup v-if="tableData.length > 0" :rows="tableData" :columns="columns" :showTable="showTable"
         @delete="deleteTable(index)" />
 
       <!-- Heading Component -->
-      <div v-for="(heading, index) in headings" :key="index">
+      <!-- <div v-for="(heading, index) in headings" :key="index">
         <HeadingPopup :headingLevel="heading.level" :headingContent="heading.content" :headingStyle="heading.style"
           @update-content="updateHeadingContent(index, $event)" @delete="deleteHeading(index)" />
-      </div>
+      </div> -->
+      <!-- <div v-if="headingConfig" :style="headingStyle" :class="headingConfig.style">
+      <HeadingPopup :is="'h' + headingConfig.level"  @update-content="updateHeadingContent(index, $event)" @delete="deleteHeading(index)">Sample Heading</HeadingPopup>
+    </div> -->
+
+    <!-- <div v-if="headingConfig" :style="headingStyle" :class="headingConfig.style">
+      <component :is="'h' + headingConfig.level" :headingContent="headingConfig.content" :headingStyle="headingConfig.style"
+      @update-content="updateHeadingContent(index, $event)" @delete="deleteHeading(index)"
+       contenteditable="true"
+        @input="updateHeadingContent"
+        class="editable-heading"
+      >
+      <span>{{ headingContent }}</span>
+      <button @click="deleteHeading" class="text-md font-bold px-2 py-1 rounded">
+        <Icon icon="system-uicons:cross" />
+      </button>
+    </component>
+    </div> -->
+    <div v-if="headingConfig" :style="headingStyle" :class="headingConfig.style" class="flex heading-container">
+      <component :is="'h' + headingConfig.level" class="dynamic-heading">
+        {{ headingConfig.content || "Dynamic Heading" }}
+      </component>
+      <button @click="deleteHeading" class="delete-heading-button text-md font-bold px-2 py-1 rounded">
+        <Icon icon="system-uicons:cross" />
+      </button>
+    </div>
 
       <!-- List Component -->
       <div v-for="(list, index) in lists" :key="index">
@@ -285,11 +319,24 @@
 
     <div v-if="isSidebarOpen">
     <!-- Paragraph Configuration Popup -->
-    <ParagraphConfigPopup :show="showParagraphConfigPopup" @close="closeParagraphConfigPopup"
-      @create="createParagraph" />
+    <!-- <ParagraphConfigPopup :show="showParagraphConfigPopup" @close="closeParagraphConfigPopup"
+      @create="createParagraph" /> -->
+      <ParagraphConfigPopup
+      v-if="showParagraphConfigPopup"
+      :show="showParagraphConfigPopup"
+      @close="showParagraphConfigPopup = false"
+      @create="addParagraph"
+    />
 
     <!-- Heading Configuration Popup -->
-    <HeadingConfigPopup :show="showHeadingConfigPopup" @close="closeHeadingConfigPopup" @create="createHeading" />
+    <!-- <HeadingConfigPopup :show="showHeadingConfigPopup" @close="closeHeadingConfigPopup" @create="createHeading" /> -->
+    <HeadingConfigPopup
+      v-if="showHeadingConfigPopup"
+      :show="showHeadingConfigPopup"
+      @close="showHeadingConfigPopup = false"
+      @create="updateHeading"
+    />
+
 
     <!-- Table Configuration Popup -->
     <TableConfigPopup :show="showTableConfigPopup" @close="closeTableConfigPopup" @create="createTable" />
@@ -316,7 +363,7 @@
 
     <!-- BG Color -->
     <ColorPickerPopup :show="showColorPopup" @close="showColorPopup = false" @apply-colors="changeColors" />
-  </div>
+ </div>
  </div>
 </template>
 
@@ -378,7 +425,8 @@ export default {
       newListItem: "",
       activeTools: [],
       headings: [],
-      paragraph: [],
+      headingConfig: null,
+      paragraphs: [],
       tableData: [],
       lists: [],
       underlines: [],
@@ -404,6 +452,19 @@ export default {
       ],
 
     };
+  },
+  props :{
+    headingContent: {
+      type: String,
+      default: "Sample Heading",
+    },
+  },
+  computed: {
+    headingStyle() {
+      return {
+        fontSize: `${this.headingConfig?.fontSize || 16}px`,
+      };
+    },
   },
   methods: {
     toggleSidebar() {
@@ -433,16 +494,23 @@ export default {
     closeParagraphConfigPopup() {
       this.showParagraphConfigPopup = false;
     },
-    createParagraph({ style }) {
-      this.paragraph.push({ style, content: "Sample Paragraph" });
+    // createParagraph({ style }) {
+    //   this.paragraph.push({ style, content: "Sample Paragraph" });
+    // },
+    addParagraph(config) {
+      this.paragraphs.push({
+        style: config.style || "", // Dynamically applies selected styles (bold, italic, underline)
+      });
     },
     updateParagraphContent(index, content) {
-      this.paragraph[index].content = content;
+      this.paragraphs[index].content = content;
     },
     deleteParagraph(index) {
-      this.paragraph.splice(index, 1);
+      this.paragraphs.splice(index, 1);
     },
-
+    updateParagraphContent(event) {
+        this.$emit("update-content", event.target.textContent);
+      },
     // Table
     openTableConfigPopup() {
       this.showTableConfigPopup = true;
@@ -464,21 +532,53 @@ export default {
     },
 
     // Heading
+    // openHeadingConfigPopup() {
+    //   this.showHeadingConfigPopup = true;
+    // },
+    // closeHeadingConfigPopup() {
+    //   this.showHeadingConfigPopup = false;
+    // },
+    // createHeading({ level, style }) {
+    //   this.headings.push({ level, style, content: "Sample Heading" });
+    // },
+    // updateHeadingContent(index, content) {
+    //   this.headingConfig[index].content = content;
+    // },
+    // deleteHeading(index) {
+    //   this.headingConfig.splice(index, 1);
+    // },
+
+    // updateHeading(config) {
+    //   this.headingConfig = config; 
+    // },
     openHeadingConfigPopup() {
       this.showHeadingConfigPopup = true;
     },
     closeHeadingConfigPopup() {
       this.showHeadingConfigPopup = false;
     },
-    createHeading({ level, style }) {
-      this.headings.push({ level, style, content: "Sample Heading" });
+    // updateHeading({ level, fontSize, style }) {
+    //   this.headingConfig.push({ level, fontSize, style, content: 'Sample Heading' });
+    //   this.closeHeadingConfigPopup();
+    // },
+    updateHeading(config) {
+      this.headingConfig = config; // Update dynamic heading configuration
+    },
+    deleteHeading() {
+      this.headingConfig = null; // Remove heading configuration
     },
     updateHeadingContent(index, content) {
-      this.headings[index].content = content;
+      this.headingConfig[index].content = content;
     },
-    deleteHeading(index) {
-      this.headings.splice(index, 1);
+    updateHeadingContent(event) {
+      this.$emit("update-content", event.target.textContent);
     },
+    // deleteHeading() {
+    //   this.$emit("delete");
+    // },
+    // deleteHeading() {
+    //   this.headingConfig.splice(index, 1);
+    // },
 
     // List
     openListConfigPopup() {
@@ -629,6 +729,12 @@ export default {
   transition: margin-left 0.3s ease;
 }
 
+.editable-heading {
+  outline: none;
+  cursor: text;
+  direction: ltr;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     margin-top: 56px;
@@ -653,6 +759,7 @@ export default {
     margin-left: 0 !important;
   }
 }
+
 
 
 ::-webkit-scrollbar {
