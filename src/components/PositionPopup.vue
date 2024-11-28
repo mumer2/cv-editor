@@ -1,9 +1,9 @@
 <template>
-    <div
-      v-if="show"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+   <div v-if="show" class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
+    <div class="bg-white p-4 border border-gray-200 h-screen w-[350px]">
+      <button @click="closePopup" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
+                ← Back
+              </button>
         <h3 class="text-lg font-bold mb-4 text-center">Add Text</h3>
   
         <!-- Input for Text -->

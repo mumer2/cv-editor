@@ -1,7 +1,10 @@
 <!-- TableConfigPopup.vue -->
 <template>
-    <div v-if="show" class="absolute inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
+   <div v-if="show" class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
+    <div class="bg-white p-4 border border-gray-200 h-screen w-[350px]">
+      <button @click="closePopup" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
+                ← Back
+              </button>
         <h2 class="text-lg font-semibold mb-4">Configure Table</h2>
         <div class="mb-4">
           <label for="rows" class="block text-sm font-medium text-gray-700">Rows</label>

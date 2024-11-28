@@ -1,6 +1,9 @@
 <template>
-    <div v-if="show" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div class="bg-white p-4 rounded-lg shadow-lg w-[300px]">
+   <div v-if="show" class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
+    <div class="bg-white p-4 border border-gray-200 h-screen w-[350px]">
+      <button  @click="$emit('close')" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
+                ← Back
+              </button>
         <h3 class="mb-4 font-bold">Create Styled Text</h3>
   
         <label class="block mb-2">

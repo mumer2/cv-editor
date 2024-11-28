@@ -26,32 +26,29 @@
           <div class="relative w-full h-screen flex">
             <!-- Main Tools Menu -->
             <div v-if="currentMenu === 'main'" class="p-2 rounded-lg w-full">
-              <ul class="space-y-2">
-                <li v-for="tool in tools" :key="tool.id" @click="openSubMenu('textSubMenu',tool.id)"
-                  class="flex justify-between w-full cursor-pointer p-3 bg-slate-50 text-black rounded">
-                  <span>
-                    {{ tool.name }}
-                  </span>
-                  <i :class="tool.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
-                    style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
-                </li>
+              <div class="grid grid-cols-3 gap-3">
+              <button v-for="tool in tools" :key="tool.id" @click="openSubMenu('textSubMenu',tool.id)"
+                      class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="ion:text" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">{{ tool.name }}</span>
+                    </button>
 
-                
-                <li v-for="tool2 in tools2" :key="tool2.id" @click="openSubMenu2('mediaSubMenu',tool2.id)"
-                  class="flex justify-between w-full cursor-pointer p-3 bg-slate-50 text-black rounded">
-                  <span>
-                    {{ tool2.name }}
-                  </span>
-                  <i :class="tool2.isOpen ? 'pi pi-times' : 'pi pi-chevron-right'"
-                    style="font-size: 0.7rem; margin-top: 6px;" class="text-black"></i>
-                </li>
-
-              </ul>
+                      <button v-for="tool2 in tools2" :key="tool2.id" @click="openSubMenu2('mediaSubMenu',tool2.id)"
+                      class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="material-symbols-light:perm-media" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">{{ tool2.name }}</span>
+                    </button>
+                  </div>
+              
             </div>
 
             <!-- Submenu Popup -->
             <div v-else-if="currentMenu === 'textSubMenu'" class="p-0 bg-white rounded-lg w-80">
-              <button @click="backToMainMenu" class="mb-4 text-sm text-blue-600 hover:text-blue-700">
+              <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
               <ul>
@@ -73,14 +70,6 @@
                         <Icon icon="oui:editor-heading" style="color: black;font-size: 26px;" />
                       </span>
                       <span class="text-sm">Heading</span>
-                    </button>
-
-                    <button @click="openTableConfigPopup"
-                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span>
-                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
-                      </span>
-                      <span class="text-sm">Table</span>
                     </button>
 
                     <button @click="openListConfigPopup"
@@ -136,7 +125,7 @@
                       <span>
                         <Icon icon="ant-design:bg-colors-outlined" style="color: black;font-size: 26px;" />
                       </span>
-                      <span class="text-sm">BG Change</span>
+                      <span class="text-sm">BG Color</span>
                     </button>
 
                   </div>
@@ -147,13 +136,21 @@
 
             <!-- Media -->
             <div v-else-if="currentMenu === 'mediaSubMenu'" class="p-2 bg-white rounded-lg w-80">
-              <button @click="backToMainMenu" class="mb-4 text-sm text-blue-600 hover:text-blue-700">
+              <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
               <ul>
                 <li>
 
                   <div class="grid grid-cols-3 gap-3">
+
+                    <button @click="openTableConfigPopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Table</span>
+                    </button>
 
                     <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
@@ -177,6 +174,8 @@
                 </li>
               </ul>
             </div>
+
+            
 
           </div>
         </div>
@@ -284,6 +283,7 @@
       <h2 class="text-sm font-bold text-center text-black">Editor</h2>
     </div>
 
+    <div v-if="isSidebarOpen">
     <!-- Paragraph Configuration Popup -->
     <ParagraphConfigPopup :show="showParagraphConfigPopup" @close="closeParagraphConfigPopup"
       @create="createParagraph" />
@@ -317,6 +317,7 @@
     <!-- BG Color -->
     <ColorPickerPopup :show="showColorPopup" @close="showColorPopup = false" @apply-colors="changeColors" />
   </div>
+ </div>
 </template>
 
 <script>
