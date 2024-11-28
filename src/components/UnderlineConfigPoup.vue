@@ -1,6 +1,6 @@
 <template>
   <div class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
-    <div class="popup bg-white p-4 border border-gray-200 h-screen w-[350px]">
+    <div class="popup bg-white p-4 border border-gray-200 h-screen w-[350px] lg:w-[350px]">
       <button  @click="$emit('close')" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
@@ -62,13 +62,12 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-.popup {
+/* .popup {
   max-width: 400px;
   width: 100%;
-}
-</style>
-<style scoped>
+} */
 @media (max-width: 768px) {
   .popup {
     margin-top: 10px;
