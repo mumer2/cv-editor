@@ -2,7 +2,6 @@
       <div class="heading-container border-b py-2">
         <div class="action-buttons mt-2 flex space-x-2">
     <div class="underline-component justify-center">
-      <!-- The text with underline styling -->
       <span
         :style="{ textDecoration: `underline ${styleType}` }"
         contenteditable="true"

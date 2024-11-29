@@ -1,4 +1,3 @@
-<!-- TableConfigPopup.vue -->
 <template>
    <div v-if="show" class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
     <div class="popup bg-blue-50 p-4 border border-gray-200 h-screen w-[350px]">

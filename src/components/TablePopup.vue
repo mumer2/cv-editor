@@ -1,4 +1,3 @@
-<!-- TableComponent.vue -->
 <template>
   <div v-if="showTable" class="table-container p-4 bg-white border border-gray-300 rounded-lg shadow-md">
     <h3 class="text-xl font-semibold mb-4">Table:</h3>
