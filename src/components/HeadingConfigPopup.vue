@@ -4,7 +4,7 @@
       <button @click="closePopup" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
         ← Back
       </button>
-      <h2 class="text-lg font-semibold mb-4">Configure Heading</h2>
+      <h2 class="text-lg font-semibold mb-4">Create Heading</h2>
 
       <!-- Heading Level -->
       <div class="mb-4">
@@ -60,7 +60,7 @@
       <!-- Action Buttons -->
       <div class="flex justify-between">
         <button @click="closePopup" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
-        <button @click="createHeading" class="px-4 py-2 bg-blue-500 text-white rounded">Create Heading</button>
+        <button @click="createHeading" class="px-4 py-2 bg-blue-500 text-white rounded">Create</button>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@
       <button @click="closePopup" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
         ← Back
       </button>
-      <h2 class="text-lg font-semibold mb-4">Configure Paragraph</h2>
+      <h2 class="text-lg font-semibold mb-4">Create Paragraph</h2>
       <div class="mb-4">
         <label for="style" class="block text-sm font-medium text-gray-700">Text Style</label>
         <select
@@ -21,7 +21,7 @@
 
       <div class="flex justify-between">
         <button @click="closePopup" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
-        <button @click="createParagraph" class="px-4 py-2 bg-blue-500 text-white rounded">Create Paragraph</button>
+        <button @click="createParagraph" class="px-4 py-2 bg-blue-500 text-white rounded">Create</button>
       </div>
     </div>
   </div>

@@ -28,7 +28,7 @@
         </div>
         <div class="flex justify-between">
           <button @click="closePopup" class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
-          <button @click="createTable" class="px-4 py-2 bg-blue-500 text-white rounded">Create Table</button>
+          <button @click="createTable" class="px-4 py-2 bg-blue-500 text-white rounded">Create</button>
         </div>
       </div>
     </div>

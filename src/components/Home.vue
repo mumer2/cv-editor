@@ -60,7 +60,6 @@
                 ← Back
               </button>
 
-
                   <div class="grid grid-cols-3 gap-3">
 
                     <button @click="openParagraphConfigPopup"
