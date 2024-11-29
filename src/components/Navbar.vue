@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 text-black border-b fixed top-0 left-0 w-full z-50">
+    <div class="bg-blue-50 text-black border-b fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-10 flex justify-between items-center h-14">
             <div class="text-xl font-bold ml-10">
                 <router-link to="/">Builder</router-link>

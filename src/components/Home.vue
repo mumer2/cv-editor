@@ -15,15 +15,15 @@
     <div>
       <transition name="slide">
         <div v-if="isSidebarOpen"
-          class="sidebar bg-white inset-y-0 left-0 w-[200px] lg:w-[350px] text-white border border-gray-300 z-50 flex flex-col p-4 overflow-y-auto space-y-4">
+          class="sidebar bg-blue-50 inset-y-0 left-0 w-[200px] lg:w-[350px] text-white border border-gray-300 z-50 flex flex-col p-4 overflow-y-auto space-y-4">
           <h2 class="text-sm font-bold text-center text-black">Tools</h2>
 
           <div class="relative my-6">
             <input id="id-s01" type="search" name="id-s01" placeholder="Search here" aria-label="Search content"
-              class="peer relative h-10 w-full border border-slate-200 px-4 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
+              class="peer relative rounded-full h-10 w-full border border-slate-200 px-4 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-300 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400" />
           </div>
 
-          <div class="relative w-full h-screen flex bg-white">
+          <div class="relative w-full h-screen flex bg-blue-50">
             <!-- Main Tools Menu -->
             <div v-if="currentMenu === 'main'" class="p-2 rounded-lg w-full">
               <div class="grid grid-cols-3 gap-3">
@@ -42,12 +42,20 @@
                       </span>
                       <span class="text-sm">{{ tool2.name }}</span>
                     </button>
+
+                    <button v-for="tool3 in tools3" :key="tool3.id" @click="openSubMenu3('insertSubMenu',tool3.id)"
+                      class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="vaadin:insert" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">{{ tool3.name }}</span>
+                    </button>
                   </div>
               
             </div>
 
             <!-- Submenu Popup -->
-            <div v-else-if="currentMenu === 'textSubMenu'" class="p-0 bg-white rounded-lg w-80">
+            <div v-else-if="currentMenu === 'textSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
               <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
@@ -111,14 +119,6 @@
                       <span class="text-sm">Link</span>
                     </button>
 
-                    <button @click="addPageBreak"
-                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span>
-                        <Icon icon="fluent:document-page-break-20-regular" style="color: black;font-size: 26px;" />
-                      </span>
-                      <span class="text-sm">Line Break</span>
-                    </button>
-
                     <button @click="showColorPopup = true"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
                       <span>
@@ -133,7 +133,7 @@
             </div>
 
             <!-- Media -->
-            <div v-else-if="currentMenu === 'mediaSubMenu'" class="p-2 bg-white rounded-lg w-80">
+            <div v-else-if="currentMenu === 'mediaSubMenu'" class="p-2 bg-blue-50 rounded-lg w-80">
               <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
@@ -141,14 +141,6 @@
                 <li>
 
                   <div class="grid grid-cols-3 gap-3">
-
-                    <button @click="openTableConfigPopup"
-                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-                      <span>
-                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
-                      </span>
-                      <span class="text-sm">Table</span>
-                    </button>
 
                     <button @click="openImagePopup"
                       class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
@@ -166,6 +158,41 @@
                       </span>
                       <span class="text-sm">Cover</span>
                     </button>
+                   
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+
+            <!-- Insert -->
+            <div v-else-if="currentMenu === 'insertSubMenu'" class="p-2 bg-blue-50 rounded-lg w-80">
+              <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
+                ← Back
+              </button>
+              <ul>
+                <li>
+
+                  <div class="grid grid-cols-3 gap-3">
+
+                    <button @click="openTableConfigPopup"
+                      class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:table-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Table</span>
+                    </button>
+
+                    <button @click="addPageBreak"
+                      class="flex flex-col gap-2 items-center py-2 px-3 text-black rounded hover:bg-slate-200">
+                      <span>
+                        <Icon icon="fluent:document-page-break-20-regular" style="color: black;font-size: 26px;" />
+                      </span>
+                      <span class="text-sm">Line Break</span>
+                    </button>
+
+                  
                    
 
                   </div>
@@ -426,6 +453,13 @@ export default {
         },
       ],
 
+      tools3: [
+        {
+          id: "tool3",
+          name: "Insert",
+        },
+      ],
+
     };
   },
   props :{
@@ -452,6 +486,9 @@ export default {
     openSubMenu2(tool2Id) {
       this.currentMenu = tool2Id;
     },
+    openSubMenu3(tool3Id) {
+      this.currentMenu = tool3Id;
+    },
     backToMainMenu() {
       this.currentMenu = "main";
     },
@@ -460,6 +497,9 @@ export default {
     },
     getSubMenu2(tool2Id) {
       return this.tools2.find((tool2) => tool2.id === tool2Id);
+    },
+    getSubMenu3(tool3Id) {
+      return this.tools3.find((tool3) => tool3.id === tool3Id);
     },
 
     // Paragraph
