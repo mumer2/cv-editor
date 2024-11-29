@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTable" class="table-container p-4 bg-white border border-gray-300 rounded-lg shadow-md">
+  <div v-if="showTable" class="table-container p-2 bg-white border border-gray-300 rounded-lg shadow-md">
     <h3 class="text-xl font-semibold mb-4">Table:</h3>
     <div class="action-buttons mt-2 flex space-x-2">
       <button @click="deleteTable" class=" text-red-800 text-xl font-bold px-2 py-1 rounded">

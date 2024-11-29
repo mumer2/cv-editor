@@ -257,7 +257,7 @@
 
       <!-- Position Component -->
       <div v-for="(textBlock, index) in textBlocks" :key="index" class="relative group">
-        <input v-model="textBlocks[index].content" class="w-full border-none focus:outline-none focus:ring"
+        <input v-model="textBlocks[index].content" class="w-full border-none outline-none "
           :class="textBlocks[index].alignment" />
         <button @click="deletePositionText(index)" class="absolute right-0 top-0 px-2 py-1 text-black text-sm">
           x
@@ -268,7 +268,7 @@
       <div v-for="(item, index) in styledTextList" :key="index" class="flex items-center gap-2">
         <span
           :style="{ color: item.color, fontStyle: item.style === 'italic' ? 'italic' : 'normal', fontWeight: item.style === 'bold' ? 'bold' : 'normal' }"
-          contenteditable="true" @input="updateText(index, $event)">
+          contenteditable="true" @input="updateText(index, $event)" class="outline-none">
           {{ item.text }}
         </span>
 

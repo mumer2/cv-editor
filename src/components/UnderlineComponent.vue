@@ -6,6 +6,7 @@
         :style="{ textDecoration: `underline ${styleType}` }"
         contenteditable="true"
         @input="updateText"
+        class="outline-none"
       >
         {{ text }}
       </span>

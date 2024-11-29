@@ -9,7 +9,7 @@
       <input 
         v-model="listItems[index]"
         placeholder="Enter item content"
-        class="border rounded p-1"
+        class="border outline-none rounded p-1"
       />
       <button @click="deleteItem(index)" class="ml-2">x</button>
     </li>
