@@ -97,19 +97,20 @@
             </button>
             <button @click="selectHeadingStyle('heading11')"
               class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-              <span class="text-2xl text-green-400 shadow-[0_0_5px_#39FF14,_0_0_10px_#39FF14,_0_0_15px_#39FF14]">Neon Glow</span>
+              <span class="text-2xl text-green-400 shadow-[0_0_5px_#39FF14,_0_0_10px_#39FF14,_0_0_15px_#39FF14]">Neon
+                Glow</span>
             </button>
             <button @click="selectHeadingStyle('heading12')"
               class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-              <span class="text-4xl text-gray-800 shadow-[2px_2px_4px_rgba(0,0,0,0.6),_4px_4px_8px_rgba(0,0,0,0.2)]">3D Effect</span>
+              <span class="text-4xl text-gray-800 shadow-[2px_2px_4px_rgba(0,0,0,0.6),_4px_4px_8px_rgba(0,0,0,0.2)]">3D
+                Effect</span>
             </button>
           </div>
 
         </div>
 
-
-          <!-- Submenu Popup -->
-          <div v-else-if="currentMenu === 'paragraphSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
+        <!-- Submenu Popup -->
+        <div v-else-if="currentMenu === 'paragraphSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
           <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-gray-500 hover:text-gray-800">
             <Icon icon="eva:arrow-back-fill" width="26" height="24" />
           </button>
@@ -124,27 +125,29 @@
               class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
               <span class="text-xl font-dancing-script">Sensherif</span>
             </button>
-          
-          </div>
-          </div>
 
- <!-- Submenu Popup -->
- <div v-else-if="currentMenu === 'listSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
+          </div>
+        </div>
+
+        <!-- Submenu Popup -->
+        <div v-else-if="currentMenu === 'listSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
           <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-gray-500 hover:text-gray-800">
             <Icon icon="eva:arrow-back-fill" width="26" height="24" />
           </button>
 
           <h2 class="text-black font-bold">Select List Styles</h2>
           <div class="grid grid-cols-2 mt-3">
-           
-           <button @click="selectListStyle('unordered')" class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-            <span class="text-black">Unordered List</span>
-          </button>
-          <button @click="selectListStyle('ordered')" class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
-            <span class="text-black">Ordered List</span>
-          </button>
+
+            <button @click="selectListStyle('unordered')"
+              class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+              <span class="text-black">Unordered List</span>
+            </button>
+            <button @click="selectListStyle('ordered')"
+              class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+              <span class="text-black">Ordered List</span>
+            </button>
           </div>
-          </div>
+        </div>
 
       </div>
 
@@ -273,14 +276,14 @@ export default {
               style === 'heading5' ? 'h5' :
                 style === 'heading6' ? 'h6' :
                   style === 'heading7' ? 'h7' :
-                  style === 'heading8' ? 'h8' :
-                  style === 'heading9' ? 'h9' :
-                  style === 'heading10' ? 'h10' :
-                  style === 'heading11' ? 'h11' :
-                  style === 'heading12' ? 'h12' :
+                    style === 'heading8' ? 'h8' :
+                      style === 'heading9' ? 'h9' :
+                        style === 'heading10' ? 'h10' :
+                          style === 'heading11' ? 'h11' :
+                            style === 'heading12' ? 'h12' :
 
 
-                    'h13'; // Default
+                              'h13'; // Default
 
       this.previewContent = `
     <${this.selectedHeading} 
@@ -291,13 +294,13 @@ export default {
                 style === 'heading5' ? 'text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500' :
                   style === 'heading6' ? 'underline decoration-pink-500' :
                     style === 'heading7' ? 'uppercase tracking-wide text-gray-700 text-sm' :
-                    style === 'heading8' ? 'border border-blue-500 text-blue-500 px-2 py-1' :
-                    style === 'heading9' ? 'text-black font-normal' :
-                    style === 'heading10' ? 'text-xl font-semibold font-dancing-script' :
-                    style === 'heading11' ? 'text-2xl text-green-400 shadow-[0_0_5px_#39FF14,_0_0_10px_#39FF14,_0_0_15px_#39FF14]' :
-                    style === 'heading12' ? 'text-4xl text-gray-800 shadow-[2px_2px_4px_rgba(0,0,0,0.6),_4px_4px_8px_rgba(0,0,0,0.2)]' :
+                      style === 'heading8' ? 'border border-blue-500 text-blue-500 px-2 py-1' :
+                        style === 'heading9' ? 'text-black font-normal' :
+                          style === 'heading10' ? 'text-xl font-semibold font-dancing-script' :
+                            style === 'heading11' ? 'text-2xl text-green-400 shadow-[0_0_5px_#39FF14,_0_0_10px_#39FF14,_0_0_15px_#39FF14]' :
+                              style === 'heading12' ? 'text-4xl text-gray-800 shadow-[2px_2px_4px_rgba(0,0,0,0.6),_4px_4px_8px_rgba(0,0,0,0.2)]' :
 
-                      'border border-blue-500 text-blue-500 px-2 py-1'}">
+                                'border border-blue-500 text-blue-500 px-2 py-1'}">
       ${this[`headingText${style.slice(-1)}`]}
     </${this.selectedHeading}>`;
     },
