@@ -39,7 +39,7 @@
             <button v-for="tool3 in tools3" :key="tool3.id" @click="openSubMenu3('listSubMenu', tool3.id)"
               class="flex  flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
               <span>
-                <Icon icon="tabler:list" style="color: black;font-size: 26px;" />
+                <Icon icon="system-uicons:paragraph-end" style="color: black;font-size: 26px;" />
               </span>
               <span class="text-sm">{{ tool3.name }}</span>
             </button>
@@ -98,8 +98,7 @@
             <button @click="selectHeadingStyle('heading11')"
               class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
               <span class="text-2xl text-green-400 shadow-[0_0_5px_#39FF14,_0_0_10px_#39FF14,_0_0_15px_#39FF14]">Neon Glow</span>
-            </button>
-            <button @click="selectHeadingStyle('heading12')"
+            </button><button @click="selectHeadingStyle('heading12')"
               class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
               <span class="text-4xl text-gray-800 shadow-[2px_2px_4px_rgba(0,0,0,0.6),_4px_4px_8px_rgba(0,0,0,0.2)]">3D Effect</span>
             </button>
@@ -137,7 +136,7 @@
           <h2 class="text-black font-bold">Select List Styles</h2>
           <div class="grid grid-cols-2 mt-3">
            
-           <button @click="selectListStyle('unordered')" class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
+            <button @click="selectListStyle('unordered')" class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
             <span class="text-black">Unordered List</span>
           </button>
           <button @click="selectListStyle('ordered')" class="flex flex-col gap-2 items-center py-2 px-4 text-black rounded hover:bg-slate-200">
@@ -178,6 +177,16 @@
           <label for="fontColor" class="mt-2">Font Color</label>
           <input v-model="headingFontColor" type="color" id="fontColor" class="w-full h-10 mt-2 p-2 border rounded">
 
+          <button @click="updatePreview" class="mt-4 p-2 bg-blue-500 text-white rounded">Update Preview</button>
+        </div>
+
+         <!-- List Style Editor -->
+         <div v-if="currentStyle === 'list'" class="w-full">
+          <label for="listType">List Type</label>
+          <select v-model="listStyle" id="listType" class="w-full mt-2 p-2 border rounded">
+            <option value="unordered">Unordered List</option>
+            <option value="ordered">Ordered List</option>
+          </select>
           <button @click="updatePreview" class="mt-4 p-2 bg-blue-500 text-white rounded">Update Preview</button>
         </div>
       </div>

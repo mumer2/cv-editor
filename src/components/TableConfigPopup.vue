@@ -1,6 +1,6 @@
 <template>
-   <div v-if="show" class="fixed w-fit h-screen top-12 flex inset-0 z-40  items-center">
-    <div class="popup bg-blue-50 p-4 border border-gray-200 h-screen w-[350px]">
+   <div v-if="show" class="relative w-full h-screen flex inset-0 z-40  items-right justify-end">
+    <div class="popup p-2 border border-gray-200 h-screen w-[350px]">
       <button @click="closePopup" class="mb-4 text-sm font-bold text-blue-600 hover:text-red-600">
                 ← Back
               </button>
@@ -66,7 +66,6 @@
   @media (max-width: 768px) {
     .popup {
       margin-top: 10px;
-      position: absolute;
       width: 300px;
       z-index: 20;
     }
