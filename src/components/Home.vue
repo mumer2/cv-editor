@@ -335,4 +335,85 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.1s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.tool-preview-section,
+.editor-section {
+  background: #f9f9f9;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 350px;
+  border: 1px solid #e5e7eb;
+}
+
+.content-area {
+  transition: margin-left 0.3s ease;
+}
+
+.editable-heading {
+  outline: none;
+  cursor: text;
+  direction: ltr;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    width: 300px;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    margin-top: 56px;
+    position: absolute;
+    z-index: 20;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+  }
+}
+
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1px;
+}
+</style>
