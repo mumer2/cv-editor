@@ -45,7 +45,7 @@
             </button>
           </div>
         </div>
-        <!-- Submenu Popup -->
+        <!-- Heading Menu -->
         <div v-else-if="currentMenu === 'textSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
           <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-gray-500 hover:text-gray-800">
             <Icon icon="eva:arrow-back-fill" width="26" height="24" />
@@ -109,7 +109,7 @@
 
         </div>
 
-        <!-- Submenu Popup -->
+        <!-- Paragraph Menu -->
         <div v-else-if="currentMenu === 'paragraphSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
           <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-gray-500 hover:text-gray-800">
             <Icon icon="eva:arrow-back-fill" width="26" height="24" />
@@ -129,13 +129,13 @@
           </div>
         </div>
 
-        <!-- Submenu Popup -->
+        <!-- List Menu -->
         <div v-else-if="currentMenu === 'listSubMenu'" class="p-0 bg-blue-50 rounded-lg w-80">
           <button @click="backToMainMenu" class="mb-4 text-sm font-bold text-gray-500 hover:text-gray-800">
             <Icon icon="eva:arrow-back-fill" width="26" height="24" />
           </button>
 
-          <h2 class="text-black font-bold">Select List Styles</h2>
+          <h2 class="text-black font-bold">Select List Type</h2>
           <div class="grid grid-cols-2 mt-3">
 
             <button @click="selectListStyle('unordered')"
@@ -150,9 +150,7 @@
         </div>
 
       </div>
-
     </div>
-
 
     <!-- Preview Section -->
     <div :class="{ 'flex-1': true }" class="preview-section p-4">
@@ -183,6 +181,22 @@
 
           <button @click="updatePreview" class="mt-4 p-2 bg-blue-500 text-white rounded">Update Preview</button>
         </div>
+        <div v-if="currentStyle === 'list'">
+          <label for="listType">List Type</label>
+          <select v-model="selectedListType" id="listType" class="w-full mt-2 p-2 border rounded">
+            <option value="disc">Disc</option>
+            <option value="circle">Circle</option>
+            <option value="square">Square</option>
+            <option value="decimal">Numbered</option>
+          </select>
+
+          <label for="listItems" class="mt-2">List Items</label>
+          <textarea v-model="listItems" id="listItems" class="w-full mt-2 p-2 border rounded"
+            placeholder="Enter items, one per line"></textarea>
+
+          <button @click="updateListPreview" class="mt-4 p-2 bg-blue-500 text-white rounded">Update Preview</button>
+        </div>
+
       </div>
     </div>
 
@@ -217,8 +231,12 @@ export default {
       headingText11: "Neon Glow",
       headingText12: "3D Effect",
 
-
-
+      selectedListType: 'disc',
+      editorToolActive: false,
+      listStyle: '',
+      listItems: [],
+      selectedList: null,
+      newListText: '',
       headingFontSize: 24,
       headingFontColor: "#000000",
       previewContent: "",
@@ -315,10 +333,28 @@ export default {
         this.headingFontSize = parseInt(window.getComputedStyle(clickedElement).fontSize);
         this.headingFontColor = window.getComputedStyle(clickedElement).color;
       }
+      else if (clickedElement.tagName === 'LI' || clickedElement.tagName === 'UL' || clickedElement.tagName === 'OL') {
+        this.selectedList = clickedElement.closest('ul, ol');
+        this.editorToolActive = true;
+        this.currentStyle = 'list';
+      }
+    },
+    
+    addListItem() {
+      if (this.newListText.trim() !== '') {
+        const newItem = `<li>${this.newListText}</li>`;
+        this.selectedList.innerHTML += newItem;
+        this.newListText = '';
+      }
+    },
+    updateListPreview() {
+      const updatedHTML = this.selectedList.outerHTML;
+      this.previewContent = this.previewContent.replace(this.selectedList.outerHTML, updatedHTML);
+      this.closeEditor();
     },
 
     closeEditor() {
-      this.editorToolActive = false;  // Close the editor
+      this.editorToolActive = false; 
     },
 
     updatePreview() {
@@ -331,7 +367,36 @@ export default {
         ${this.headingText}
       </${this.selectedHeading}>`;
       }
-    }
+    },
+
+    selectListStyle(style) {
+      this.listStyle = style;
+      this.createList();
+      this.currentMenu = 'main';
+    },
+
+    createList() {
+      this.listItems = ['Item 1', 'Item 2', 'Item 3'];
+      if (this.listStyle === 'unordered') {
+        this.previewContent += `<ul>${this.listItems
+          .map((item) => `<li>${item}</li>`)
+          .join('')}</ul>`;
+      } else if (this.listStyle === 'ordered') {
+        this.previewContent += `<ol>${this.listItems
+          .map((item) => `<li>${item}</li>`)
+          .join('')}</ol>`;
+      }
+    },
+    generateList(style, items) {
+      const listItemsHtml = items
+        .split('\n')
+        .map((item) => `<li>${item}</li>`)
+        .join('');
+      return `<ul style="list-style-type: ${style}">${listItemsHtml}</ul>`;
+    },
+    updateListPreview() {
+      this.previewContent = this.generateList(this.selectedListType, this.listItems);
+    },
   },
 };
 </script>
@@ -405,8 +470,7 @@ export default {
   }
 }
 
-
-
+/* ScrollBar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
